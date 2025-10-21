@@ -13,6 +13,8 @@ public class PlayerMovement : NetworkBehaviour
     public float JumpForce = 10f;
     public float GravityValue = -9.81f;
 
+ 
+
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
@@ -29,6 +31,8 @@ public class PlayerMovement : NetworkBehaviour
             _jumpPressed = true;
     }
 
+    
+
     public override void FixedUpdateNetwork()
     {
         // Apenas o jogador com autoridade de input deve executar lógica de movimento
@@ -41,6 +45,7 @@ public class PlayerMovement : NetworkBehaviour
         Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         move *= PlayerSpeed * Runner.DeltaTime;
 
+
         _velocity.y += GravityValue * Runner.DeltaTime;
 
         if (_jumpPressed && _controller.isGrounded)
@@ -52,5 +57,6 @@ public class PlayerMovement : NetworkBehaviour
             transform.forward = move.normalized;
 
         _jumpPressed = false;
+
     }
 }
