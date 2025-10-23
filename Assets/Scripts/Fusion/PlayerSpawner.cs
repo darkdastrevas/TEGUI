@@ -1,25 +1,21 @@
 ﻿using Fusion;
 using UnityEngine;
+using static Unity.Collections.Unicode;
+
 public class PlayerSpawner : SimulationBehaviour, IPlayerJoined
 {
-    [Header("Prefabs dos Jogadores")]
-    public GameObject Player1Prefab; 
-    public GameObject Player2Prefab;
-    // Contador de jogadores que se juntaram (compartilhado com todo mundo '-')
-    private static int playerCount = 0;
+    [SerializeField] private GameObject player1Prefab;
+    [SerializeField] private GameObject player2Prefab;
+
     public void PlayerJoined(PlayerRef player)
     {
-        if (player != Runner.LocalPlayer)
-            return;
- 
-        Vector3 spawnPos = new Vector3(playerCount * 2, 1, 0);
-        // Escolhe o prefab com base no número de jogadores
-        GameObject prefabToSpawn = playerCount == 0 ? Player1Prefab : Player2Prefab;
-        // Spawna o objeto 
-        
+        if (player == Runner.LocalPlayer)
+        {
+            GameObject prefabToSpawn = Runner.SessionInfo.PlayerCount == 1
+                ? player1Prefab
+                : player2Prefab;
 
-        Runner.Spawn(prefabToSpawn, spawnPos, Quaternion.identity, player);
-        // Incrementador
-        playerCount++;
+            Runner.Spawn(prefabToSpawn, new Vector3(0, 1, 0), Quaternion.identity, player);
+        }
     }
 }
