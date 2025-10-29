@@ -5,7 +5,8 @@ using UnityEngine;
 public class PlayerMovement : NetworkBehaviour
 {
     private CharacterController _controller;
-    private Vector3 _velocity;
+    public Vector3 _velocity;
+
     private bool _jumpPressed;
 
     [Header("Configurações")]
@@ -59,4 +60,5 @@ public class PlayerMovement : NetworkBehaviour
         _jumpPressed = false;
 
     }
+
 }

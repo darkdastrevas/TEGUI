@@ -3,6 +3,12 @@ using UnityEngine;
 
 public struct NetworkInputData : INetworkInput
 {
-    public Vector2 move;
-    public NetworkBool jump;
+    public NetworkButtons buttons;
+    public Vector2 moveDirection;
+}
+
+public enum InputButtons
+{
+    Jump = 1 << 0,
+    Climb = 1 << 1
 }
