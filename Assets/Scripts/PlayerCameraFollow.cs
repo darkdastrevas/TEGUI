@@ -39,7 +39,7 @@ public class PlayerCameraFollow : MonoBehaviour
 
         foreach (var p in players)
         {
-            if (p.HasInputAuthority && p.GetComponent<PlayerMovementDefi>() != null)
+            if (p.HasInputAuthority && p.GetComponent<PlayerMovement>() != null)
             {
                 target = p.transform;
                 targetLocked = true;
