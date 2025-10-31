@@ -63,9 +63,11 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\PushableObject.cs" />
     <Compile Include="Assets\Scripts\Fusion\PlayerSpawner.cs" />
+    <Compile Include="Assets\Scripts\Fusion\PlayerMovementDefi.cs" />
     <Compile Include="Assets\Scripts\PushPullController.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\Scripts\PlayerCameraFollow.cs" />
+    <Compile Include="Assets\Scripts\ObjectInteraction.cs" />
     <Compile Include="Assets\Scripts\Fusion\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\Fusion\NetworkInputData.cs" />
   </ItemGroup>

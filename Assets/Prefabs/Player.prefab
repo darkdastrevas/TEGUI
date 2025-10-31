@@ -292,8 +292,8 @@ GameObject:
   - component: {fileID: 1405079763242266849}
   - component: {fileID: 6415676715646086225}
   - component: {fileID: 4648491492646600875}
-  - component: {fileID: 5856906659590283534}
-  - component: {fileID: -601227397299576795}
+  - component: {fileID: -6438281963718227129}
+  - component: {fileID: 1374653310383034809}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -316,6 +316,7 @@ Transform:
   m_Children:
   - {fileID: 5319745023813812859}
   - {fileID: 5455142769191668543}
+  - {fileID: 8864012386614339680}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7866136094888720152
@@ -437,8 +438,8 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 4648491492646600875}
-  - {fileID: 5856906659590283534}
-  - {fileID: -601227397299576795}
+  - {fileID: -6438281963718227129}
+  - {fileID: 1374653310383034809}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &4648491492646600875
 MonoBehaviour:
@@ -457,7 +458,7 @@ MonoBehaviour:
   SyncParent: 0
   _autoAOIOverride: 1
   DisableSharedModeInterpolation: 0
---- !u!114 &5856906659590283534
+--- !u!114 &-6438281963718227129
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -466,24 +467,59 @@ MonoBehaviour:
   m_GameObject: {fileID: 6253787926854231561}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fd713bb3dc23c04c9c81ee5a003183a, type: 3}
+  m_Script: {fileID: 11500000, guid: 5de3a9790d547a14e88c45dd612447c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactDistance: 3
+  interactLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  holdPoint: {fileID: 8864012386614339680}
+  moveSpeed: 2.5
+--- !u!114 &1374653310383034809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6253787926854231561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb531ca5297af8949adf0ed78b83c82d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerSpeed: 5
   JumpForce: 5
   GravityValue: -9.81
---- !u!114 &-601227397299576795
-MonoBehaviour:
+  CanRotate: 1
+--- !u!1 &6376768322816272460
+GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6253787926854231561}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 701d88dca4f06a1459a1ab240296ed28, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cam: {fileID: 5455142769191668543}
-  interactDist: 8
-  pushSpeed: 2
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8864012386614339680}
+  m_Layer: 0
+  m_Name: HoldPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8864012386614339680
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6376768322816272460}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1.234}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8586997072550280057}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
