@@ -8,13 +8,12 @@ public class PlayerMovement : NetworkBehaviour
     public Vector3 _velocity;
 
     private bool _jumpPressed;
+    private Vector3 _moveInput; // Captura input de movimento aqui
 
     [Header("Configurações")]
     public float PlayerSpeed = 5f;
     public float JumpForce = 10f;
     public float GravityValue = -9.81f;
-
- 
 
     private void Awake()
     {
@@ -24,28 +23,27 @@ public class PlayerMovement : NetworkBehaviour
     // Captura input apenas do jogador local
     void Update()
     {
-        // Isso garante que apenas o jogador dono do objeto capture input
-        if (!Object.HasInputAuthority)
+        // Corrigido: era Object.HasInputAuthority
+        if (!HasInputAuthority)
             return;
 
+        // Captura input de movimento e jump
+        _moveInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         if (Input.GetButtonDown("Jump"))
             _jumpPressed = true;
     }
 
-    
-
     public override void FixedUpdateNetwork()
     {
-        // Apenas o jogador com autoridade de input deve executar lógica de movimento
-        if (!Object.HasInputAuthority)
+        // Corrigido: era Object.HasInputAuthority
+        if (!HasInputAuthority)
             return;
 
         if (_controller.isGrounded && _velocity.y < 0)
             _velocity.y = -1f;
 
-        Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        move *= PlayerSpeed * Runner.DeltaTime;
-
+        // Usa o input capturado no Update()
+        Vector3 move = _moveInput * PlayerSpeed * Runner.DeltaTime;
 
         _velocity.y += GravityValue * Runner.DeltaTime;
 
@@ -58,7 +56,5 @@ public class PlayerMovement : NetworkBehaviour
             transform.forward = move.normalized;
 
         _jumpPressed = false;
-
     }
-
 }

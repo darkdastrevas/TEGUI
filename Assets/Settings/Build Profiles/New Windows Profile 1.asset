@@ -20,8 +20,10 @@ MonoBehaviour:
     rid: 6444725230101856314
   m_OverrideGlobalSceneList: 1
   m_Scenes:
-  - m_enabled: 1
+  - m_enabled: 0
     m_path: Assets/Scenes/Testandow.unity
+  - m_enabled: 1
+    m_path: Assets/Scenes/BlockOut.unity
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:
     m_Settings:
@@ -67,8 +69,8 @@ MonoBehaviour:
     - line: '|   m_SplashScreenLogos: []'
     - line: '|   m_VirtualRealitySplashScreen: {instanceID: 0}'
     - line: '|   m_HolographicTrackingLossScreen: {instanceID: 0}'
-    - line: '|   defaultScreenWidth: 512'
-    - line: '|   defaultScreenHeight: 384'
+    - line: '|   defaultScreenWidth: 1024'
+    - line: '|   defaultScreenHeight: 768'
     - line: '|   defaultScreenWidthWeb: 960'
     - line: '|   defaultScreenHeightWeb: 600'
     - line: '|   m_StereoRenderingPath: 0'

@@ -61,8 +61,10 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.59f2\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\PlayerCameraFollowDefi.cs" />
     <Compile Include="Assets\Scripts\Fusion\PlayerSpawner.cs" />
     <Compile Include="Assets\Scripts\Fusion\LedgeGrab.cs" />
+    <Compile Include="Assets\Scripts\Fusion\PlayerMovementDefi.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\Scripts\PlayerCameraFollow.cs" />
     <Compile Include="Assets\Scripts\Fusion\PlayerMovement.cs" />
@@ -79,12 +81,14 @@
     <None Include="Assets\Photon\Fusion\Assemblies\Fusion.Runtime.xml" />
     <None Include="Assets\Photon\Fusion\Plugins\NanoSockets\NanoSockets\Static\NanoSockets.dll" />
     <None Include="Assets\Photon\Fusion\Assemblies\Fusion.Sockets.dll" />
+    <None Include="Assets\Models\Defi\Materiais e Texturas\ToonShader.shader" />
     <None Include="Assets\Photon\Fusion\release_history.txt" />
     <None Include="Assets\Photon\Fusion\Plugins\NanoSockets\NanoSockets\Dynamic\NanoSockets.dll" />
     <None Include="Assets\Photon\Fusion\Assemblies\Fusion.Runtime.dll" />
     <None Include="Assets\Photon\Fusion\Plugins\NanoSockets\Metro\NanoSockets.dll" />
     <None Include="Assets\StarterAssets\license.txt" />
     <None Include="Assets\Photon\PhotonLibs\changes-library.txt" />
+    <None Include="Assets\Shaders\ToonShader.shader" />
     <None Include="Assets\Photon\Fusion\Plugins\NanoSockets\Metro\x64\libnanosockets.dll" />
     <None Include="Assets\Photon\Fusion\Assemblies\Fusion.Realtime.xml" />
     <None Include="Assets\Photon\Fusion\Plugins\NanoSockets\Metro\x86\libnanosockets.dll" />
