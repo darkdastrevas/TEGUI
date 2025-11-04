@@ -111,7 +111,7 @@ public class PlayerMovement : NetworkBehaviour
         _animator.SetFloat("Speed", speed);
 
         // Controle de queda
-        if (!isGrounded && _velocity.y < -1f && !isJumping)
+        if (!isGrounded && _velocity.y < -1f && isJumping)
         {
             _animator.SetBool("isFalling", true);
         }
