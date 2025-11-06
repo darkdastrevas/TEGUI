@@ -860,12 +860,12 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 2
-  m_Radius: 0.5
+  m_Radius: 0.3
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1.15, z: 0}
+  m_Center: {x: 0, y: 1.1, z: -0.1}
 --- !u!114 &5571080534865099721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -879,7 +879,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Animator: {fileID: 126857019193060942}
-  ApplyTiming: 2
+  ApplyTiming: 0
   SyncSettings: 127
   StateHashes: 000000006054aa04e21be6813270625b602a1d72a098633d4b5bebc0a32bf44648e87cbba0a532b94ec7faccd46ab621c96d71662b1a167c7940695528a981077af3fe2ee67a3208b4204d21ee8e265dbcd459746bd5a32d398fdc04
   TriggerHashes: 00000000e67a32083459a8af795b123b
@@ -974,25 +974,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f21d29451f2eb045a428eca143ff688, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  climbUpHeight: 3
-  climbUpSpeed: 3.5
-  moveSpeed: 0.9
   ledgeLayer:
     serializedVersion: 2
     m_Bits: 256
   rayLength: 1.3
   rayHeight: 1
-  autoGrab: 1
   grabHeightOffset: -0.9
   grabForwardOffset: 0.2
+  moveSpeed: 0.9
   rayAmount: 2
   rayOffset: 0.2
   lateralRayLength: 1
   lateralRayOffset: 0.9
   ledgeContinuityLateralOffset: 0.5
-  grabCooldown: 0.3
-  jumpDelay: 0.6
+  climbUpHeight: 2.3
+  climbUpSpeed: 2.8
+  autoGrab: 1
   releaseKey: 120
+  jumpDelay: 0.6
+  isGrabbing: 0
+  isClimbing: 0
 --- !u!1 &8127579949456469720
 GameObject:
   m_ObjectHideFlags: 0
