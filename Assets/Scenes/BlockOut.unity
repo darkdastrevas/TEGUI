@@ -3018,7 +3018,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -3082705723793538069, guid: ed2f82297316be643bc4d7094945dedc, type: 3}
       propertyPath: moveSpeed
-      value: 65.26
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1601171187763966316, guid: ed2f82297316be643bc4d7094945dedc, type: 3}
       propertyPath: m_Name
@@ -3027,6 +3027,14 @@ PrefabInstance:
     - target: {fileID: 2954631628866952439, guid: ed2f82297316be643bc4d7094945dedc, type: 3}
       propertyPath: m_Mass
       value: 0.0001
+      objectReference: {fileID: 0}
+    - target: {fileID: 2954631628866952439, guid: ed2f82297316be643bc4d7094945dedc, type: 3}
+      propertyPath: m_UseGravity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2954631628866952439, guid: ed2f82297316be643bc4d7094945dedc, type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5149636048260474973, guid: ed2f82297316be643bc4d7094945dedc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3067,6 +3075,14 @@ PrefabInstance:
     - target: {fileID: 5149636048260474973, guid: ed2f82297316be643bc4d7094945dedc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6633242626941636308, guid: ed2f82297316be643bc4d7094945dedc, type: 3}
+      propertyPath: localCarryOffset.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6633242626941636308, guid: ed2f82297316be643bc4d7094945dedc, type: 3}
+      propertyPath: localCarryOffset.z
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 6633242626941636308, guid: ed2f82297316be643bc4d7094945dedc, type: 3}
       propertyPath: disableRigidbodyDuringCarry
