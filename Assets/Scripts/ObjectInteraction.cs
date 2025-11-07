@@ -47,55 +47,42 @@ public class ObjectInteraction : NetworkBehaviour
 
     void TryInteract()
     {
-        Debug.DrawRay(transform.position + Vector3.up * 0.5f, transform.forward * interactDist, Color.yellow, 2f);
-
-        if (Physics.Raycast(transform.position + Vector3.up * 0.5f, transform.forward, out RaycastHit hit, interactDist))
+        if (!Physics.Raycast(transform.position + Vector3.up * 0.5f, transform.forward, out RaycastHit hit, interactDist))
         {
-            if (hit.collider.CompareTag("Interact"))
-            {
-                var netObj = hit.collider.GetComponent<NetworkObject>();
-                if (netObj == null)
-                {
-                    Debug.LogWarning("Objeto Interact precisa ter NetworkObject e PushableNetworkController.");
-                    return;
-                }
-
-                // Guardamos a referência localmente (NetworkObject)
-                heldNetObject = netObj;
-
-                // Pedimos ao dono do estado que comece a carregar esse objeto por este player
-                // O RPC será executado na StateAuthority do objeto (onde a posição realmente é aplicada)
-                RPC_RequestStartCarry(heldNetObject.Id, Object.Id);
-
-                isInteracting = true;
-
-                // bloqueia rotação e ativa modo de interação no player
-                lockedRotation = transform.rotation;
-                playerMovement.IsInteracting = true;
-                playerMovement.CanRotate = false;
-                playerMovement.PlayerSpeed *= carrySpeedMultiplier;
-
-                // animações
-                if (animator != null)
-                {
-                    animator.SetBool("isPushing", true);
-                    animator.SetBool("PushingIdle", true);
-                }
-
-                Debug.Log("Pedido de interação enviado ao servidor para: " + heldNetObject.name);
-            }
+            Debug.Log("Nada para interagir.");
+            return;
         }
-        else
+
+        if (!hit.collider.CompareTag("Interact"))
+            return;
+
+        var netObj = hit.collider.GetComponent<NetworkObject>();
+        if (netObj == null) return;
+
+        heldNetObject = netObj;
+
+        RPC_RequestStartCarry(heldNetObject.Id, Object.Id);
+
+        isInteracting = true;
+        lockedRotation = transform.rotation;
+
+        playerMovement.IsInteracting = true;
+        playerMovement.CanRotate = false;
+        playerMovement.PlayerSpeed *= carrySpeedMultiplier;
+
+        if (animator != null)
         {
-            Debug.Log("Nenhum objeto atingido.");
+            animator.SetBool("isPushing", true);
+            animator.SetBool("PushingIdle", true);
         }
+
+        Debug.Log("Interagiu com " + heldNetObject.name);
     }
 
     void StopInteraction()
     {
         if (heldNetObject != null)
         {
-            // Pedimos ao dono do estado para parar de carregar esse objeto
             RPC_RequestStopCarry(heldNetObject.Id);
             heldNetObject = null;
         }
@@ -103,23 +90,15 @@ public class ObjectInteraction : NetworkBehaviour
         isInteracting = false;
         axisLocked = false;
 
-        // restaura controle do player
         playerMovement.IsInteracting = false;
         playerMovement.CanRotate = true;
         playerMovement.PlayerSpeed /= carrySpeedMultiplier;
 
-        // animações reset
+        ResetPushAnimations();
         if (animator != null)
-        {
-            animator.SetBool("isPushing", false);
-            animator.SetBool("PushForward", false);
-            animator.SetBool("PushBackward", false);
-            animator.SetBool("PushRight", false);
-            animator.SetBool("PushLeft", false);
             animator.SetBool("PushingIdle", false);
-        }
 
-        Debug.Log("Pedido de stop enviado ao servidor.");
+        Debug.Log("StopInteraction enviado.");
     }
 
     void HandleMovement()
@@ -129,7 +108,6 @@ public class ObjectInteraction : NetworkBehaviour
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
 
-        // Detecta qual eixo será usado
         if (!axisLocked && (Mathf.Abs(h) > 0.1f || Mathf.Abs(v) > 0.1f))
         {
             lockedAxis = Mathf.Abs(h) > Mathf.Abs(v) ? Vector3.right : Vector3.forward;
@@ -137,28 +115,27 @@ public class ObjectInteraction : NetworkBehaviour
         }
 
         Vector3 moveDir = Vector3.zero;
+
         if (axisLocked)
         {
-            moveDir = (lockedAxis == Vector3.right) ? new Vector3(h, 0, 0)
-                                                    : new Vector3(0, 0, v);
+            moveDir = (lockedAxis == Vector3.right)
+                ? new Vector3(h, 0, 0)
+                : new Vector3(0, 0, v);
         }
 
-        if (Mathf.Abs(h) < 0.1f && Mathf.Abs(v) < 0.1f)
-        {
-            axisLocked = false;
-            ResetPushAnimations();
-            if (animator != null) animator.SetBool("PushingIdle", true);
-        }
-
-        if (moveDir.sqrMagnitude > 0.01f)
+        if (moveDir.sqrMagnitude > 0.01f && heldNetObject != null)
         {
             cc.Move(moveDir.normalized * moveSpeed * Time.deltaTime);
+            RPC_MoveObject(heldNetObject.Id, moveDir.normalized);
             UpdatePushAnimations(moveDir);
         }
         else
         {
             ResetPushAnimations();
-            if (animator != null) animator.SetBool("PushingIdle", true);
+            if (animator != null)
+                animator.SetBool("PushingIdle", true);
+
+            axisLocked = false;
         }
     }
 
@@ -188,25 +165,30 @@ public class ObjectInteraction : NetworkBehaviour
         animator.SetBool("PushLeft", false);
     }
 
-    // ---------------- RPCs que pedem para a StateAuthority do objeto agir ---------------- //
+    // ---------------- RPCs ---------------- //
 
-    // pedido enviado ao StateAuthority do objeto: comece a seguir o player (playerId)
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
     void RPC_RequestStartCarry(NetworkId objectId, NetworkId playerId)
     {
         var obj = Runner.FindObject(objectId);
         if (obj == null) return;
 
-        // o PushableNetworkController existe no objeto e só age na StateAuthority
         var ctrl = obj.GetComponent<PushableNetworkController>();
         if (ctrl != null)
-        {
             ctrl.StartCarrying(playerId);
-            Debug.Log("[RPC] Server: start carrying object " + objectId + " by player " + playerId);
-        }
     }
 
-    // pedido enviado ao StateAuthority do objeto: pare de seguir
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    void RPC_MoveObject(NetworkId objectId, Vector3 direction)
+    {
+        var obj = Runner.FindObject(objectId);
+        if (obj == null) return;
+
+        var pushable = obj.GetComponent<PushableObject>();
+        if (pushable != null)
+            pushable.Move(direction);
+    }
+
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
     void RPC_RequestStopCarry(NetworkId objectId)
     {
@@ -215,9 +197,6 @@ public class ObjectInteraction : NetworkBehaviour
 
         var ctrl = obj.GetComponent<PushableNetworkController>();
         if (ctrl != null)
-        {
             ctrl.StopCarrying();
-            Debug.Log("[RPC] Server: stop carrying object " + objectId);
-        }
     }
 }

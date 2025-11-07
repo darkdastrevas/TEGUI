@@ -71,6 +71,7 @@
     <Compile Include="Assets\Scripts\PlayerCameraFollow.cs" />
     <Compile Include="Assets\Scripts\ObjectInteraction.cs" />
     <Compile Include="Assets\Scripts\Fusion\PlayerMovement.cs" />
+    <Compile Include="Assets\Scripts\PushableNetworkController.cs" />
     <Compile Include="Assets\Scripts\Fusion\NetworkInputData.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParrelSync", "ParrelSync.cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Fusion.CodeGen", "Unity.Fusion.CodeGen.csproj", "{481D581C-01E8-0F30-654E-C55720C54881}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fusion.Unity", "Fusion.Unity.Player.csproj", "{C7521967-E784-CC48-A1B9-11BB6F3D8C3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.Player.csproj", "{5BD93CA7-19A7-9B22-4046-0BBE42F5A461}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +47,14 @@ Global
 		{481D581C-01E8-0F30-654E-C55720C54881}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{481D581C-01E8-0F30-654E-C55720C54881}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{481D581C-01E8-0F30-654E-C55720C54881}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7521967-E784-CC48-A1B9-11BB6F3D8C3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7521967-E784-CC48-A1B9-11BB6F3D8C3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7521967-E784-CC48-A1B9-11BB6F3D8C3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7521967-E784-CC48-A1B9-11BB6F3D8C3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BD93CA7-19A7-9B22-4046-0BBE42F5A461}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BD93CA7-19A7-9B22-4046-0BBE42F5A461}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BD93CA7-19A7-9B22-4046-0BBE42F5A461}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BD93CA7-19A7-9B22-4046-0BBE42F5A461}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
