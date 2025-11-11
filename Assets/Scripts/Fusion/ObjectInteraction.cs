@@ -3,19 +3,22 @@ using UnityEngine;
 
 public class ObjectInteraction : NetworkBehaviour
 {
-    [Header("Referências")]
-    [SerializeField] private Transform holdPoint; // ponto onde o objeto é segurado
-    [SerializeField] private float interactDist = 3f; // distância máxima para interagir
-    [SerializeField] private float moveSpeed = 2.5f; // velocidade de empurrar/puxar
-    [SerializeField] private Animator animator; // 🎬 referência ao Animator do player
+    [Header("Interação")]
+    [SerializeField] private float interactDist = 3f;
+    [SerializeField] private float moveSpeed = 2.5f;
+    [SerializeField] private float carrySpeedMultiplier = 0.6f;
+
+    [Header("Refs")]
+    [SerializeField] private Animator animator;
 
     private PlayerMovementDefi playerMovement;
     private CharacterController cc;
-    private GameObject heldObject;
+
+    private NetworkObject heldNetObject;
     private bool isInteracting;
     private bool axisLocked;
-    private Vector3 lockedAxis;
     private Quaternion lockedRotation;
+    private Vector3 lockedAxis;
 
     void Start()
     {
@@ -39,145 +42,150 @@ public class ObjectInteraction : NetworkBehaviour
                 StopInteraction();
         }
 
-        if (isInteracting && heldObject != null)
+        if (isInteracting && heldNetObject != null)
             HandleMovement();
     }
 
     void TryInteract()
     {
-        Debug.DrawRay(transform.position + Vector3.up * 0.5f, transform.forward * interactDist, Color.yellow, 2f);
+        if (!Physics.Raycast(transform.position + Vector3.up * 0.5f, transform.forward, out var hit, interactDist))
+            return;
 
-        if (Physics.Raycast(transform.position + Vector3.up * 0.5f, transform.forward, out RaycastHit hit, interactDist))
+        if (!hit.collider.CompareTag("Interact"))
+            return;
+
+        var netObj = hit.collider.GetComponent<NetworkObject>();
+        if (netObj == null) return;
+
+        heldNetObject = netObj;
+
+        RPC_RequestStartCarry(heldNetObject.Id, Object.Id);
+
+        isInteracting = true;
+        lockedRotation = transform.rotation;
+
+        playerMovement.IsInteracting = true;
+        playerMovement.CanRotate = false;
+        playerMovement.PlayerSpeed *= carrySpeedMultiplier;
+
+        if (animator != null)
         {
-            if (hit.collider.CompareTag("Interact"))
-            {
-                heldObject = hit.collider.gameObject;
-                heldObject.transform.SetParent(holdPoint);
-                heldObject.transform.localPosition = Vector3.zero;
-                heldObject.transform.localRotation = Quaternion.identity;
-
-                isInteracting = true;
-
-                // bloqueia rotação e ativa modo de interação no player
-                lockedRotation = transform.rotation;
-                playerMovement.IsInteracting = true;
-                playerMovement.CanRotate = false;
-
-                // ativa estado base de interação
-                animator.SetBool("isPushing", true);
-                animator.SetBool("PushingIdle", true);
-
-                Debug.Log("Interagindo com objeto: " + heldObject.name);
-            }
-            else
-            {
-                Debug.Log("Objeto atingido não tem a tag 'Interact'");
-            }
-        }
-        else
-        {
-            Debug.Log("Nenhum objeto atingido.");
+            animator.SetBool("isPushing", true);
+            animator.SetBool("PushingIdle", true);
         }
     }
 
     void StopInteraction()
     {
-        if (heldObject != null)
+        if (heldNetObject != null)
         {
-            heldObject.transform.SetParent(null);
-            heldObject = null;
+            RPC_RequestStopCarry(heldNetObject.Id);
+            heldNetObject = null;
         }
 
         isInteracting = false;
         axisLocked = false;
 
-        // restaura controle do player
         playerMovement.IsInteracting = false;
         playerMovement.CanRotate = true;
+        playerMovement.PlayerSpeed /= carrySpeedMultiplier;
 
-        // 🎬 desativa todas as animações de push
-        animator.SetBool("isPushing", false);
-        animator.SetBool("PushForward", false);
-        animator.SetBool("PushBackward", false);
-        animator.SetBool("PushRight", false);
-        animator.SetBool("PushLeft", false);
-        animator.SetBool("PushingIdle", false);
-
-        Debug.Log("Saiu do modo de interação.");
+        ResetPushAnimations();
+        if (animator != null)
+        {
+            animator.SetBool("PushingIdle", false);
+            animator.SetBool("isPushing", false);
+        }
     }
 
     void HandleMovement()
     {
-        // mantem a rotação fixa
         transform.rotation = lockedRotation;
 
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
 
-        // detecta eixo inicial
+        // Detecta input e lock eixo
         if (!axisLocked && (Mathf.Abs(h) > 0.1f || Mathf.Abs(v) > 0.1f))
         {
-            if (Mathf.Abs(h) > Mathf.Abs(v))
-                lockedAxis = Vector3.right;
-            else
-                lockedAxis = Vector3.forward;
-
+            lockedAxis = Mathf.Abs(h) > Mathf.Abs(v) ? Vector3.right : Vector3.forward;
             axisLocked = true;
         }
 
-        // define direção de movimento
-        Vector3 moveDir = Vector3.zero;
-        if (axisLocked)
-        {
-            if (lockedAxis == Vector3.right)
-                moveDir = new Vector3(h, 0, 0);
-            else if (lockedAxis == Vector3.forward)
-                moveDir = new Vector3(0, 0, v);
-        }
+        Vector3 moveDir = axisLocked
+            ? (lockedAxis == Vector3.right ? new Vector3(h, 0, 0) : new Vector3(0, 0, v))
+            : Vector3.zero;
 
-        // libera eixo quando o jogador solta o input
-        if (Mathf.Abs(h) < 0.1f && Mathf.Abs(v) < 0.1f)
+        if (moveDir.sqrMagnitude < 0.01f)
         {
+            ResetPushAnimations();
+            if (animator != null) animator.SetBool("PushingIdle", true);
             axisLocked = false;
-            ResetPushAnimations();
-            animator.SetBool("PushingIdle", true); // perdi ela vei :(
+            return;
         }
 
-        // Aplica movimento
-        if (moveDir.sqrMagnitude > 0.01f)
+        // Sempre ativa animações baseadas no input (mesmo se não puder mover)
+        UpdatePushAnimations(moveDir);
+
+        var pushable = heldNetObject.GetComponent<PushableObject>();
+        if (pushable == null || !pushable.CanMove(moveDir.normalized))
         {
-            cc.Move(moveDir.normalized * moveSpeed * Time.deltaTime);
-            UpdatePushAnimations(moveDir);
+            // Não move o player/objeto se obstáculo, mas animações já ativadas
+            return;
         }
-        else
-        {
-            ResetPushAnimations();
-            animator.SetBool("PushingIdle", true); // perdi essa animacao :(
-        }
+
+        // Só move se puder
+        cc.Move(moveDir.normalized * moveSpeed * Time.deltaTime);
+        RPC_MoveObject(heldNetObject.Id, moveDir.normalized);
     }
 
-    // atualiza animações conforme direção do movimento
     void UpdatePushAnimations(Vector3 moveDir)
     {
-        bool forward = Vector3.Dot(moveDir, transform.forward) > 0.5f;
-        bool backward = Vector3.Dot(moveDir, -transform.forward) > 0.5f;
-        bool right = Vector3.Dot(moveDir, transform.right) > 0.5f;
-        bool left = Vector3.Dot(moveDir, -transform.right) > 0.5f;
+        if (animator == null) return;
 
-        animator.SetBool("PushingIdle", false); // 
+        Vector3 localMove = transform.InverseTransformDirection(moveDir);
 
+        bool forward = localMove.z > 0.5f;
+        bool backward = localMove.z < -0.5f;
+        bool right = localMove.x > 0.5f;
+        bool left = localMove.x < -0.5f;
+
+        animator.SetBool("PushingIdle", false);
         animator.SetBool("PushForward", forward);
         animator.SetBool("PushBackward", backward);
         animator.SetBool("PushRight", right);
         animator.SetBool("PushLeft", left);
     }
 
-    // reset das animações
     void ResetPushAnimations()
     {
+        if (animator == null) return;
+
         animator.SetBool("PushForward", false);
         animator.SetBool("PushBackward", false);
         animator.SetBool("PushRight", false);
         animator.SetBool("PushLeft", false);
+    }
+
+    // RPCs
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    void RPC_RequestStartCarry(NetworkId objectId, NetworkId playerId)
+    {
+        var obj = Runner.FindObject(objectId);
+        obj?.GetComponent<PushableNetworkController>()?.StartCarrying(playerId);
+    }
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    void RPC_MoveObject(NetworkId objectId, Vector3 dir)
+    {
+        var obj = Runner.FindObject(objectId);
+        obj?.GetComponent<PushableObject>()?.Move(dir);
+    }
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    void RPC_RequestStopCarry(NetworkId objectId)
+    {
+        var obj = Runner.FindObject(objectId);
+        obj?.GetComponent<PushableNetworkController>()?.StopCarrying();
     }
 }
