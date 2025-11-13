@@ -1,64 +1,111 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
-public class CreditSequence : MonoBehaviour
+public class CreditsManager : MonoBehaviour
 {
-    [System.Serializable]
-    public class CreditScreen
-    {
-        public CanvasGroup group;
-        public float fadeInTime = 1f;
-        public float holdTime = 2f;
-        public float fadeOutTime = 1f;
-    }
+    [Header("Credit Screens (ordem)")]
+    public CanvasGroup[] creditScreens;
 
-    public CreditScreen[] screens; // coloque suas telas aqui no inspetor
-    public GameObject creditsRoot; // objeto pai do canvas de cr�ditos
+    [Header("Background extra")]
+    public CanvasGroup extraBackground;
+
+    [Header("Timings")]
+    public float fadeInTime = 1f;
+    public float holdTime = 1.5f;
+    public float fadeOutTime = 1f;
+
+    [Header("Title Screen (sem fade)")]
+    public GameObject titleScreenRoot;
+
+    [Header("Flow")]
+    public GameObject creditsRoot;
+
+    // Flag estática para impedir repetição
+    private static bool hasPlayed = false;
 
     private void Start()
     {
-        StartCoroutine(PlayCredits());
-    }
+        // Ativa o título antes, mas invisível (se precisar)
+        titleScreenRoot.SetActive(true);
 
-    IEnumerator PlayCredits()
-    {
-        creditsRoot.SetActive(true);
-
-        foreach (var screen in screens)
+        if (hasPlayed)
         {
-            screen.group.gameObject.SetActive(true);
+            // Já tocou uma vez → pula direto pro título
+            if (creditsRoot != null)
+                creditsRoot.SetActive(false);
 
-            // fade in
-            yield return Fade(screen.group, 0, 1, screen.fadeInTime);
+            if (extraBackground != null)
+            {
+                extraBackground.alpha = 0;
+                extraBackground.gameObject.SetActive(false);
+            }
 
-            // hold
-            yield return new WaitForSeconds(screen.holdTime);
-
-            // fade out
-            yield return Fade(screen.group, 1, 0, screen.fadeOutTime);
-
-            screen.group.gameObject.SetActive(false);
+            return;
         }
 
-        creditsRoot.SetActive(false);
+        hasPlayed = true; // marca como tocado
 
-        // se quiser chamar outra cena ou liberar player, fa�a aqui
-        // SceneManager.LoadScene(...)
-        // player.EnableMovement();
+        // Créditos ativados
+        if (creditsRoot != null)
+            creditsRoot.SetActive(true);
+
+        // Reseta telas
+        foreach (var cg in creditScreens)
+        {
+            cg.alpha = 0;
+            cg.gameObject.SetActive(false);
+        }
+
+        if (extraBackground != null)
+        {
+            extraBackground.alpha = 1;
+            extraBackground.gameObject.SetActive(true);
+        }
+
+        StartCoroutine(RunCredits());
     }
 
-    IEnumerator Fade(CanvasGroup g, float start, float end, float time)
+    private IEnumerator RunCredits()
+    {
+        for (int i = 0; i < creditScreens.Length; i++)
+        {
+            CanvasGroup cg = creditScreens[i];
+
+            cg.gameObject.SetActive(true);
+            yield return Fade(cg, 0, 1, fadeInTime);
+            yield return new WaitForSeconds(holdTime);
+            yield return Fade(cg, 1, 0, fadeOutTime);
+            cg.gameObject.SetActive(false);
+        }
+
+        // Funde fundo extra
+        if (extraBackground != null)
+        {
+            yield return Fade(extraBackground, 1, 0, fadeOutTime);
+            extraBackground.gameObject.SetActive(false);
+        }
+
+        // Agora só ativa o title screen SEM FADE
+        if (titleScreenRoot != null)
+            titleScreenRoot.SetActive(true);
+
+        // Desliga os créditos
+        if (creditsRoot != null)
+            creditsRoot.SetActive(false);
+    }
+
+    private IEnumerator Fade(CanvasGroup cg, float from, float to, float time)
     {
         float t = 0;
-        g.alpha = start;
+        cg.alpha = from;
 
         while (t < time)
         {
             t += Time.deltaTime;
-            g.alpha = Mathf.Lerp(start, end, t / time);
+            cg.alpha = Mathf.Lerp(from, to, t / time);
             yield return null;
         }
 
-        g.alpha = end;
+        cg.alpha = to;
     }
 }

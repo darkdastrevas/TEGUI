@@ -95,6 +95,7 @@ Material:
     - _AlphaToMask: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
+    - _BlendOp: 0
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
@@ -106,13 +107,13 @@ Material:
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
     - _FresnelBrightness: 0
-    - _FresnelPower: 0
+    - _FresnelPower: 0.105
     - _FresnelShadowDropoff: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _HighIntensity: 1.7
-    - _LightScalar: 1
+    - _LightScalar: 0.8
     - _LowIntensity: 0.95
     - _Metallic: 0
     - _Mode: 0
@@ -125,6 +126,7 @@ Material:
     - _RimAlpha: 0
     - _RimDropOff: 0
     - _RimPower: 0.597
+    - _SampleGI: 0
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -136,7 +138,7 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 0.3327625, g: 0.36725327, b: 0.5324095, a: 1}
-    - _Color: {r: 0.29681382, g: 0.32101652, b: 0.4339623, a: 1}
+    - _Color: {r: 0.33276248, g: 0.36725324, b: 0.5324095, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _FresnelColor: {r: 1, g: 1, b: 1, a: 1}
     - _HighColor: {r: 1, g: 1, b: 1, a: 1}

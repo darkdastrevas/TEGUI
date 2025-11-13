@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ledge
   - Interact
+  - MainMenuCanvas
   layers:
   - Default
   - TransparentFX
