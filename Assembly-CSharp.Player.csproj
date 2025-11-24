@@ -63,26 +63,37 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Scripts da fase 1 entrega\ButtonTrigger.cs" />
     <Compile Include="Assets\Scripts\TitleScreen.cs" />
+    <Compile Include="Assets\Scripts\UI_Menu\PersistentEventSystem.cs" />
     <Compile Include="Assets\Scripts\Scripts da fase 1 entrega\BridgeController.cs" />
     <Compile Include="Assets\Scripts\PushableObject.cs" />
     <Compile Include="Assets\Scripts\Fusion\PlayerSpawner.cs" />
     <Compile Include="Assets\Scripts\AudioManager.cs" />
+    <Compile Include="Assets\VolumeSettings.cs" />
+    <Compile Include="Assets\Scripts\Scripts de som\SoundsSO.cs" />
     <Compile Include="Assets\Scripts\Fusion\LedgeGrab.cs" />
     <Compile Include="Assets\Scripts\Fusion\PlayerMovementDefi.cs" />
-    <Compile Include="Assets\Scripts\Fusion\PlayerMovementOtavio.cs" />
+    <Compile Include="Assets\Scripts\Scripts de som\PlaySoundExit.cs" />
     <Compile Include="Assets\Scripts\Scripts da fase 1 entrega\BridgeButton.cs" />
     <Compile Include="Assets\Scripts\UI_Menu\MenuButtons.cs" />
     <Compile Include="Assets\Scripts\CreditsManager.cs" />
+    <Compile Include="Assets\Scripts\UI_Menu\CountdownTimer.cs" />
+    <Compile Include="Assets\Scripts\UI_Menu\VolumeSettingsRefresher.cs" />
+    <Compile Include="Assets\Scripts\Scripts de som\SoundManager.cs" />
+    <Compile Include="Assets\Scripts\Scripts de som\SoundValues.cs" />
     <Compile Include="Assets\Scripts\PushPullController.cs" />
     <Compile Include="Assets\Scripts\Fusion\ObjectInteraction.cs" />
+    <Compile Include="Assets\Scripts\Scripts de som\PlaySoundEnter.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
+    <Compile Include="Assets\Scripts\Scripts de som\SoundsSOEditor.cs" />
     <Compile Include="Assets\Scripts\PlayerCameraFollow.cs" />
     <Compile Include="Assets\Scripts\UI_Menu\MenuWindow.cs" />
     <Compile Include="Assets\Scripts\Fusion\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\UI_Menu\MenuManager.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
+    <Compile Include="Assets\Scripts\UI_Menu\UIRefresher.cs" />
     <Compile Include="Assets\Scripts\PushableNetworkController.cs" />
     <Compile Include="Assets\Scripts\Fusion\NetworkInputData.cs" />
+    <Compile Include="Assets\Scripts\UI_Menu\LoadingScreenManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Photon\Fusion\Plugins\NanoSockets\libnanosockets_LICENSE.txt" />

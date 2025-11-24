@@ -1,6 +1,6 @@
+using Fusion;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,88 +9,85 @@ public class GameManager : MonoBehaviour
     [Header("Menu Scene Name")]
     public string menuSceneName = "MainMenu";
 
-    [Header("Config")]
-    public bool preventCreditsOnReturn = true; // impede tocar créditos ao voltar
-
-    private bool isReturningToMenu = false;
+    private bool isBusy = false;
 
     private void Awake()
     {
-        // Singleton (persiste entre cenas)
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(this);
         }
         else
         {
             Destroy(gameObject);
-            return;
         }
     }
 
-    private void Update()
+    // -------------------------------
+    // RESTART LEVEL
+    // -------------------------------
+    public void RestartLevel()
     {
-        // Pressionar ESC para voltar ao menu
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            ReturnToMenu();
-        }
+        if (isBusy) return;
+        isBusy = true;
+        StartCoroutine(RestartRoutine());
     }
 
-    public void ReturnToMenu()
+    private System.Collections.IEnumerator RestartRoutine()
     {
-        if (isReturningToMenu) return;
-        isReturningToMenu = true;
+        var runner = FindObjectOfType<NetworkRunner>();
+        if (runner != null)
+            runner.Shutdown();
 
+        yield return new WaitForSeconds(0.4f);
+
+        Scene current = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(current.name);
+
+        isBusy = false;
+    }
+
+    // -------------------------------
+    // RETURN TO MENU
+    // -------------------------------
+    public void ReturnToMenuButton()
+    {
+        if (isBusy) return;
+        isBusy = true;
         StartCoroutine(ReturnToMenuRoutine());
     }
 
     private System.Collections.IEnumerator ReturnToMenuRoutine()
     {
-        // Garante cursor ativo
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        var runner = FindObjectOfType<NetworkRunner>();
+        if (runner != null)
+            runner.Shutdown();
 
-        // Carrega a cena do menu
-        AsyncOperation loadOp = SceneManager.LoadSceneAsync(menuSceneName);
-        while (!loadOp.isDone)
-            yield return null;
+        yield return new WaitForSeconds(0.4f);
 
-        // Espera um frame pra garantir que tudo da cena carregou
-        yield return null;
+        SceneManager.LoadScene(menuSceneName);
 
-        // Reativa o EventSystem se necessário
-        var ev = EventSystem.current;
-        if (ev == null)
+        isBusy = false;
+    }
+
+    [Header("UI Fim de Jogo")]
+    public GameObject defeatScreen; // Arraste a tela de derrota aqui
+
+    // -------------------------------
+    // EVENTO DISPARADO PELO CountdownTimer
+    // -------------------------------
+    public void OnTimeExpired()
+    {
+        isBusy = false; // Bloqueia outras transições
+
+        // 1. Mostrar a tela de derrota localmente
+        if (defeatScreen != null)
         {
-            Debug.LogWarning("[GameManager] Nenhum EventSystem encontrado — criando um novo.");
-            new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
+            defeatScreen.SetActive(true);
         }
-        else if (!ev.enabled)
-            ev.enabled = true;
-
-        // Reativa input no Canvas (caso tenha CanvasGroup principal)
-        CanvasGroup[] groups = GameObject.FindObjectsOfType<CanvasGroup>(true);
-        foreach (var cg in groups)
-        {
-            if (cg.CompareTag("MainMenuCanvas")) // usa uma tag pra identificar o canvas principal
-            {
-                cg.alpha = 1;
-                cg.interactable = true;
-                cg.blocksRaycasts = true;
-                cg.gameObject.SetActive(true);
-            }
-        }
-
-        // Impede que os créditos rodem novamente
-        if (preventCreditsOnReturn)
-        {
-            var credits = GameObject.FindObjectOfType<CreditsManager>();
-            if (credits != null)
-                credits.enabled = false;
-        }
-
-        isReturningToMenu = false;
+       
     }
 }
+
+

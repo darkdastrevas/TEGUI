@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MenuButtons : MonoBehaviour
 {
@@ -8,7 +7,15 @@ public class MenuButtons : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene(gameSceneName);
+        // Inicia o loading
+        if (LoadingScreenManager.Instance != null)
+        {
+            LoadingScreenManager.Instance.StartLoading(gameSceneName);
+        }
+        else
+        {
+            Debug.LogError("LoadingScreenManager não encontrado!");
+        }
     }
 
     public void QuitGame()
@@ -16,7 +23,7 @@ public class MenuButtons : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
-            Application.Quit();
+        Application.Quit();
 #endif
     }
 }
