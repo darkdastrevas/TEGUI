@@ -10,26 +10,25 @@ public class PlayerInteraction : NetworkBehaviour
     [Header("Debug")]
     [SerializeField] private bool debugMode = true;
 
-    private bool pressedR;
+    private bool pressedF;
 
     void Update()
     {
-        if (Object.HasInputAuthority)
+        if (Object.HasInputAuthority && Input.GetKeyDown(KeyCode.F))
         {
-            if (Input.GetKeyDown(KeyCode.F))
-                pressedR = true;
+            pressedF = true;
+            if (debugMode) Debug.Log("[PlayerInteraction] F apertado");
         }
     }
 
     public override void FixedUpdateNetwork()
     {
-        if (!Object.HasInputAuthority)
-            return;
+        if (!Object.HasInputAuthority) return;
 
-        if (pressedR)
+        if (pressedF)
         {
             TryInteract();
-            pressedR = false;
+            pressedF = false;
         }
     }
 
@@ -43,18 +42,24 @@ public class PlayerInteraction : NetworkBehaviour
             var obj = hit.collider.GetComponent<ChangeTextureObject>();
             if (!obj) return;
 
-            // A forma 100% confiável de identificar o HOST
-            bool isHost = obj.Object.HasStateAuthority;
+            // PEGA A TAG DO GAMEOBJECT DO PLAYER
+            string playerTag = gameObject.tag;
+
+            // Escolhe a textura baseado na tag do player
+            int textureIndex = 0;
+            if (playerTag == "Player") textureIndex = Random.Range(1, 3); // B/B1
+            else if (playerTag == "Player2") textureIndex = Random.Range(3, 5); // C/C1
+            else
+            {
+                if (debugMode) Debug.LogWarning("[PlayerInteraction] Tag inválida: " + playerTag);
+                return;
+            }
 
             if (debugMode)
-                Debug.Log($"[PlayerInteraction] Enviando pedido, Host = {isHost}");
+                Debug.Log("[PlayerInteraction] Player " + playerTag + " selecionou textura " + textureIndex);
 
-            obj.RpcRequestTextureChange(isHost);
-        }
-        else
-        {
-            if (debugMode)
-                Debug.Log("[PlayerInteraction] Raycast não acertou nada.");
+            // Envia RPC para todos aplicarem a textura
+            obj.RpcApplyTextureIndex(textureIndex);
         }
     }
 }

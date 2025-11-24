@@ -819,7 +819,7 @@ GameObject:
   - component: {fileID: -5920992003826579355}
   m_Layer: 0
   m_Name: Tones
-  m_TagString: Player
+  m_TagString: Player 2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1012,6 +1012,7 @@ MonoBehaviour:
   interactLayer:
     serializedVersion: 2
     m_Bits: 1024
+  isDefi: 0
   debugMode: 1
 --- !u!1 &8127579949456469720
 GameObject:
