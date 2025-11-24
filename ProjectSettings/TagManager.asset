@@ -7,6 +7,7 @@ TagManager:
   - Ledge
   - Interact
   - MainMenuCanvas
+  - Player 2
   layers:
   - Default
   - TransparentFX
@@ -18,8 +19,8 @@ TagManager:
   - PlayerBody
   - Ledge
   - Post
-  - 
-  - 
+  - Interact
+  - Player 2
   - 
   - 
   - 

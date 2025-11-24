@@ -1,28 +1,30 @@
 using UnityEngine;
 using System.Collections;
-using SmallHedge.SoundManager; // IMPORTANTE
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
 
     [Header("Audio Sources")]
-    public AudioSource musicSource;     // Continua controlando só música
-    public AudioSource SFXSource;       // É usado como fallback, se quiser
+    public AudioSource musicSource;
+    public AudioSource sfxSource;
 
     [Header("Volumes")]
     [Range(0, 1)] public float masterVolume = 1f;
     [Range(0, 1)] public float musicVolume = 1f;
     [Range(0, 1)] public float sfxVolume = 1f;
 
-    private void Awake()
+    void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else Destroy(gameObject);
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     // ----------------------------------------------------
@@ -60,22 +62,16 @@ public class AudioManager : MonoBehaviour
     }
 
     // ----------------------------------------------------
-    // SFX usando SoundManager
+    // SFX (sons curtos)
     // ----------------------------------------------------
-    public void PlaySFX(SoundType sound, float volume = 1f)
+    public void PlaySFX(AudioClip clip)
     {
-        // O SoundManager cuida de tudo:
-        // - mixer group
-        // - volumes internos do SO
-        // - escolher clip aleatório
-
-        float finalVolume = volume * sfxVolume * masterVolume;
-
-        SoundManager.PlaySound(sound, SFXSource, finalVolume);
+        if (clip == null) return;
+        sfxSource.PlayOneShot(clip, sfxVolume * masterVolume);
     }
 
     // ----------------------------------------------------
-    // Controle de volumes (igual antes)
+    // Ajustar volumes em runtime
     // ----------------------------------------------------
     public void SetMasterVolume(float v)
     {
@@ -95,9 +91,9 @@ public class AudioManager : MonoBehaviour
         UpdateVolumes();
     }
 
-    private void UpdateVolumes()
+    void UpdateVolumes()
     {
         musicSource.volume = musicVolume * masterVolume;
-        SFXSource.volume = sfxVolume * masterVolume;
+        sfxSource.volume = sfxVolume * masterVolume;
     }
 }
