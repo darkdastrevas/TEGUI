@@ -816,9 +816,10 @@ GameObject:
   - component: {fileID: 3290176158104213729}
   - component: {fileID: 4897673797667634434}
   - component: {fileID: 2849489876856758417}
+  - component: {fileID: -5920992003826579355}
   m_Layer: 0
   m_Name: Tones
-  m_TagString: Player
+  m_TagString: Player 2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -927,6 +928,7 @@ MonoBehaviour:
   - {fileID: 3290176158104213729}
   - {fileID: 4897673797667634434}
   - {fileID: 2849489876856758417}
+  - {fileID: -5920992003826579355}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &3290176158104213729
 MonoBehaviour:
@@ -994,6 +996,24 @@ MonoBehaviour:
   jumpDelay: 0.6
   isGrabbing: 0
   isClimbing: 0
+--- !u!114 &-5920992003826579355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8010167378658914931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b300970789911d48a51552505cbdfaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactDistance: 2
+  interactLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  isDefi: 0
+  debugMode: 1
 --- !u!1 &8127579949456469720
 GameObject:
   m_ObjectHideFlags: 0

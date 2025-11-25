@@ -347,6 +347,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 44dd5fd662142254a87f0a9800515d9e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8212029491746616898}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 44dd5fd662142254a87f0a9800515d9e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1336406681331414761}
   m_SourcePrefab: {fileID: 100100000, guid: 44dd5fd662142254a87f0a9800515d9e, type: 3}
 --- !u!4 &2720998577148600413 stripped
 Transform:
@@ -404,6 +407,7 @@ MonoBehaviour:
   - {fileID: 3616924220051889738}
   - {fileID: 1114439873854265283}
   - {fileID: 8212029491746616898}
+  - {fileID: 1336406681331414761}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &2659040485459695890
 MonoBehaviour:
@@ -498,3 +502,19 @@ MonoBehaviour:
   moveSpeed: 0.3
   carrySpeedMultiplier: 0.6
   animator: {fileID: 2395510451054108844}
+--- !u!114 &1336406681331414761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3353278908064168679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b300970789911d48a51552505cbdfaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactDistance: 2
+  interactLayer:
+    serializedVersion: 2
+    m_Bits: 1024
