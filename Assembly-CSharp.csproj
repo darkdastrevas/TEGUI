@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\UI e Menu\MenuManager.cs" />
+    <Compile Include="Assets\Scripts\DefeatScreenController.cs" />
     <Compile Include="Assets\Scripts\Scripts da fase 1 entrega\ButtonTrigger.cs" />
     <Compile Include="Assets\Scripts\Scripts da fase 1 entrega\BridgeController.cs" />
     <Compile Include="Assets\Scripts\Audio\PlaySoundExit.cs" />
@@ -69,26 +70,28 @@
     <Compile Include="Assets\Scripts\Players\PlayerInteraction.cs" />
     <Compile Include="Assets\Scripts\Audio\PlaySoundEnter.cs" />
     <Compile Include="Assets\Scripts\UI e Menu\PersistentEventSystem.cs" />
+    <Compile Include="Assets\Scripts\Fusion\PlayerSpawner.cs" />
     <Compile Include="Assets\Scripts\Players\ChangeTextureObject.cs" />
     <Compile Include="Assets\Scripts\Players\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\Players\ObjectInteraction.cs" />
     <Compile Include="Assets\Scripts\UI e Menu\MenuButtons.cs" />
     <Compile Include="Assets\Scripts\Audio\SoundsSO.cs" />
     <Compile Include="Assets\Scripts\Audio\VolumeSettings.cs" />
-    <Compile Include="Assets\Scripts\UI e Menu\VolumeSettingsRefresher.cs" />
     <Compile Include="Assets\Scripts\Scripts da fase 1 entrega\BridgeButton.cs" />
     <Compile Include="Assets\Scripts\Audio\SoundsSOEditor.cs" />
     <Compile Include="Assets\Scripts\UI e Menu\LoadingScreenManager.cs" />
     <Compile Include="Assets\Scripts\Players\PlayerCameraFollow.cs" />
     <Compile Include="Assets\Scripts\Players\PlayerMovementDefi.cs" />
     <Compile Include="Assets\Scripts\PushPullController.cs" />
+    <Compile Include="Assets\Scripts\Audio\VolumeSettingsRefresher.cs" />
     <Compile Include="Assets\Scripts\UI e Menu\CountdownTimer.cs" />
     <Compile Include="Assets\Scripts\UI e Menu\UIRefresher.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\Scripts\Audio\SoundValues.cs" />
     <Compile Include="Assets\Scripts\Audio\AudioManager.cs" />
-    <Compile Include="Assets\Scripts\Players\PlayerSpawner.cs" />
+    <Compile Include="Assets\Scripts\Fusion\GameSessionHandler.cs" />
     <Compile Include="Assets\Scripts\UI e Menu\TitleScreen.cs" />
+    <Compile Include="Assets\Scripts\Players\IPlayerMovement.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Players\LedgeGrab.cs" />
     <Compile Include="Assets\Scripts\Audio\SoundManager.cs" />
@@ -96,6 +99,8 @@
     <Compile Include="Assets\Scripts\PushableNetworkController.cs" />
     <Compile Include="Assets\Scripts\Fusion\NetworkInputData.cs" />
     <Compile Include="Assets\Scripts\UI e Menu\MenuWindow.cs" />
+    <Compile Include="Assets\Scripts\Fusion\NetworkManager.cs" />
+    <Compile Include="Assets\Scripts\UI e Menu\PlayerHUD.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Photon\Fusion\Plugins\NanoSockets\libnanosockets_LICENSE.txt" />

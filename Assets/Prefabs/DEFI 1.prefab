@@ -529,8 +529,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SortKey: 1369154170
-  ObjectInterest: 0
-  Flags: 262145
+  ObjectInterest: 1
+  Flags: 1
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 2659040485459695890}
@@ -555,8 +555,8 @@ MonoBehaviour:
   ApplyTiming: 2
   SyncSettings: -1
   StateHashes: 000000002b1a167c794069556bd5a32d398fdc0426afa49774f5dbbe28a981077af3fe2e5c6815fb416fd2bcc8cf5f94b07157f56f0390724cb393d45317a62a91656788
-  TriggerHashes: 00000000
-  TotalWords: 4
+  TriggerHashes: 0000000026afa497
+  TotalWords: 5
 --- !u!114 &3616924220051889738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -609,6 +609,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _velocity: {x: 0, y: 0, z: 0}
+  IsMovementBlocked: 0
   PlayerSpeed: 5
   JumpForce: 10
   GravityValue: -9.81
@@ -644,10 +645,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b300970789911d48a51552505cbdfaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactDistance: 3
+  interactDistance: 1.5
   interactLayer:
     serializedVersion: 2
     m_Bits: 1024
+  playerAnimator: {fileID: 2395510451054108844}
+  paintTrigger: Pixo
+  paintDelay: 4.5
   debugMode: 1
 --- !u!1 &3390663920796435866
 GameObject:

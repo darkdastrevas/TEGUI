@@ -1,6 +1,7 @@
 fileFormatVersion: 2
 guid: 8d02ead10968e084496c604705e32f0c
 labels:
+- FusionDefaultGlobal
 - FusionPrefab
 PrefabImporter:
   externalObjects: {}
