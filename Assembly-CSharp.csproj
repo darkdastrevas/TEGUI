@@ -117,6 +117,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\Photon\Fusion\Assemblies\Fusion.Sockets.dll" />
     <None Include="Assets\Assets\3D\Models\Defi\Materiais e Texturas\ToonShader.shader" />
+    <None Include="Assets\ithappy\Cartoon_City_Free\Render_Pipeline_Convert\Render_Pipeline_Instructions_Unity_6.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\SDFFunctions.hlsl" />
     <None Include="Assets\Photon\Fusion\release_history.txt" />
     <None Include="Assets\Photon\Fusion\Plugins\NanoSockets\NanoSockets\Dynamic\NanoSockets.dll" />
