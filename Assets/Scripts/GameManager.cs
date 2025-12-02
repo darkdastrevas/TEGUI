@@ -10,6 +10,11 @@ public class GameManager : MonoBehaviour
     [Header("Menu Scene Name")]
     public string menuSceneName = "MainMenu";
 
+    [Header("Victory")]
+    public int requiredTextureCount = 4;   // Número necessário para vencer
+    public GameObject victoryScreen;       // Tela de vitória
+    public bool isVictoryTriggered = false;
+
     private bool isBusy = false;
     [HideInInspector] public bool IsGameActive = true;
     public GameObject defeatScreen;
@@ -134,4 +139,30 @@ public class GameManager : MonoBehaviour
             defeatScreenObject.SetActive(true);
         }
     }
+
+    public void HandleVictory(GameObject victoryScreenObject)
+    {
+        if (isVictoryTriggered || isGameOverTriggered) return;
+
+        isVictoryTriggered = true;
+        IsGameActive = false;
+
+        Debug.Log("Vitória! Preparando tela de vitória...");
+
+        StartCoroutine(DelayedVictory(victoryScreenObject));
+    }
+
+    private IEnumerator DelayedVictory(GameObject victoryScreenObject)
+    {
+        // Delay antes da tela aparecer (ajuste à vontade)
+        float victoryDelay = 2.5f;
+        yield return new WaitForSecondsRealtime(victoryDelay);
+
+        if (victoryScreenObject != null)
+        {
+            victoryScreenObject.SetActive(true);
+            Debug.Log("Tela de vitória ativada.");
+        }
+    }
+
 }

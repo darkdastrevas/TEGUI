@@ -9,5 +9,6 @@ namespace SmallHedge.SoundManager
     public class SoundsSO : ScriptableObject
     {
         public SoundList[] sounds;
+      
     }
 }

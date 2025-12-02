@@ -1,5 +1,6 @@
 ﻿using Fusion;
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : NetworkBehaviour, IPlayerMovement
@@ -8,7 +9,7 @@ public class PlayerMovement : NetworkBehaviour, IPlayerMovement
     private Animator _animator;
     private LedgeGrab ledgeGrab;
 
-    // Propriedade pública para expor se o player está grounded (implementa IPlayerMovement)
+    // Interface
     public bool IsGrounded => _controller != null && _controller.isGrounded;
 
     public bool IsMovementBlocked = false;
@@ -29,10 +30,13 @@ public class PlayerMovement : NetworkBehaviour, IPlayerMovement
     public float GravityValue = -9.81f;
     public float landLockTime = 0.4f;
 
-    [Header("Lata de Tinta")]
+    [Header("Lata de Tinta (Sincronizada)")]
     public GameObject paintCan;
     public float paintCanDuration = 2f;
-    private bool paintInUse = false;
+
+    // Estado sincronizado da lata
+    [Networked] private bool PaintCanActive { get; set; }
+    private bool lastPaintCanState = false;
 
     public override void Spawned()
     {
@@ -41,28 +45,21 @@ public class PlayerMovement : NetworkBehaviour, IPlayerMovement
         ledgeGrab = GetComponent<LedgeGrab>();
 
         if (paintCan != null)
-            paintCan.SetActive(false); // começa invisível
+            paintCan.SetActive(false);
 
-        // Encontra e configura a HUD existente na cena
         if (Object.HasInputAuthority)
         {
-            var hudObject = GameObject.Find("PlayerHUD"); // Encontra o objeto HUD na cena
+            var hudObject = GameObject.Find("PlayerHUD");
+
             if (hudObject != null)
             {
                 var hudScript = hudObject.GetComponent<PlayerHUD>();
+
                 if (hudScript != null)
                 {
-                    hudScript.SetPlayer(this); // Configura o ícone baseado na tag do jogador
-                    Debug.Log("[PlayerMovement] HUD da cena configurada para jogador local.");
+                    hudScript.SetPlayer(this);
+                    Debug.Log("[PlayerMovement] HUD configurado.");
                 }
-                else
-                {
-                    Debug.LogWarning("[PlayerMovement] PlayerHUD script não encontrado no objeto da cena.");
-                }
-            }
-            else
-            {
-                Debug.LogWarning("[PlayerMovement] PlayerHUD objeto não encontrado na cena.");
             }
         }
     }
@@ -89,14 +86,13 @@ public class PlayerMovement : NetworkBehaviour, IPlayerMovement
         if (!HasInputAuthority)
             return;
 
-        // BLOQUEIO TOTAL DURANTE A LATA
-        if (paintInUse)
+        if (PaintCanActive)
         {
-            // Não faz nada aqui, pois o movimento é bloqueado na coroutine
+            // Não movimenta enquanto a lata está ativa
             return;
         }
 
-        // BLOQUEIO TOTAL DURANTE ESCALADA
+        // Impede movimento ao escalar
         if (ledgeGrab != null && (ledgeGrab.isGrabbing || ledgeGrab.isClimbing))
         {
             _velocity.y = -1f;
@@ -106,21 +102,20 @@ public class PlayerMovement : NetworkBehaviour, IPlayerMovement
 
         if (IsMovementBlocked)
         {
-            // Se travado, garantimos que o player pare completamente
             _velocity = Vector3.zero;
             return;
         }
 
         bool isGrounded = _controller.isGrounded;
 
-        // Início da queda
+        // ==== QUEDA ====
         if (!isGrounded && !isFalling && _velocity.y < -1f)
         {
             isFalling = true;
             _animator.SetBool("isFalling", true);
         }
 
-        // Aterrissagem
+        // ==== ATERRISSAGEM ====
         if (isGrounded && !wasGroundedLastFrame && isFalling)
         {
             _animator.SetTrigger("Land");
@@ -133,7 +128,6 @@ public class PlayerMovement : NetworkBehaviour, IPlayerMovement
             landTimer = 0;
         }
 
-        // Timer do land
         if (isLanding)
         {
             landTimer += Runner.DeltaTime;
@@ -144,7 +138,7 @@ public class PlayerMovement : NetworkBehaviour, IPlayerMovement
             }
         }
 
-        // PULO
+        // ==== PULO ====
         if (_jumpPressed && isGrounded && !isLanding)
         {
             _velocity.y = JumpForce;
@@ -152,13 +146,13 @@ public class PlayerMovement : NetworkBehaviour, IPlayerMovement
             isJumping = true;
         }
 
-        // Gravidade
+        // ==== GRAVIDADE ====
         if (isGrounded && _velocity.y < 0)
             _velocity.y = -1f;
         else
             _velocity.y += GravityValue * Runner.DeltaTime;
 
-        // MOVIMENTO
+        // ==== MOVIMENTO ====
         Vector3 move = Vector3.zero;
 
         if (!isLanding)
@@ -166,7 +160,7 @@ public class PlayerMovement : NetworkBehaviour, IPlayerMovement
 
         _controller.Move(move + _velocity * Runner.DeltaTime);
 
-        // Animações de movimento
+        // ==== ANIMAÇÕES ====
         if (move.sqrMagnitude > 0.001f && !isLanding)
         {
             transform.forward = move.normalized;
@@ -183,52 +177,57 @@ public class PlayerMovement : NetworkBehaviour, IPlayerMovement
         wasGroundedLastFrame = isGrounded;
     }
 
-    // --------------------------
-    //     SISTEMA DA LATA
-    // --------------------------
-
-    private System.Collections.IEnumerator UsePaintCanRoutine()
-    {
-        // Verificação reforçada: só ativa se estiver no chão
-        if (!_controller.isGrounded)
-        {
-            Debug.Log("[PlayerMovement] Spray can só pode ser usado no chão!");
-            yield break; // Sai da coroutine sem ativar
-        }
-
-        paintInUse = true;
-
-        // ativa a lata
-        if (paintCan != null)
-            paintCan.SetActive(true);
-
-        // espera o tempo configurado
-        yield return new WaitForSeconds(paintCanDuration);
-
-        // desativa a lata
-        if (paintCan != null)
-            paintCan.SetActive(false);
-
-        // libera movimento
-        SetMovementBlocked(false);
-
-        paintInUse = false;
-    }
+    // ===============================
+    //      SISTEMA DA LATA (RPC)
+    // ===============================
 
     private void TryUsePaintCan()
     {
-        // Verificação inicial: só pode tentar usar no chão
-        if (!_controller.isGrounded)
-            return;
+        if (!_controller.isGrounded) return;
 
-        // evitar spam
-        if (paintInUse)
-            return;
+        if (PaintCanActive) return;
 
-        Runner.StartCoroutine(UsePaintCanRoutine());
+        // CHAMA O RPC (sincroniza a todos)
+        RPC_UsePaintCan();
     }
 
-    // Implementação da interface: Bloqueia/desbloqueia movimento
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    private void RPC_UsePaintCan()
+    {
+        if (PaintCanActive) return;
+
+        // Ativa sincronizado
+        PaintCanActive = true;
+
+        // Inicia coroutine somente no StateAuthority
+        StartCoroutine(PaintCanRoutine());
+    }
+
+    private IEnumerator PaintCanRoutine()
+    {
+        // Ativar objeto localmente no host
+        if (paintCan != null)
+            paintCan.SetActive(true);
+
+        yield return new WaitForSeconds(paintCanDuration);
+
+        // Desativar sincronizado
+        PaintCanActive = false;
+    }
+
+    public override void Render()
+    {
+        // Atualiza estado visual nos clientes
+        if (PaintCanActive != lastPaintCanState)
+        {
+            lastPaintCanState = PaintCanActive;
+
+            if (paintCan != null)
+                paintCan.SetActive(PaintCanActive);
+        }
+    }
+
+    // Interface
     public void SetMovementBlocked(bool isBlocked)
     {
         IsMovementBlocked = isBlocked;

@@ -1401,9 +1401,17 @@
       <Project>{B96B2FEE-2FF0-A544-A7B4-DF0D68B38D39}</Project>
       <Name>Fusion.Unity</Name>
     </ProjectReference>
+    <ProjectReference Include="CFXREditor.csproj">
+      <Project>{9940EC78-4F51-CC0C-74C9-94239FB6D7CC}</Project>
+      <Name>CFXREditor</Name>
+    </ProjectReference>
     <ProjectReference Include="ParrelSync.csproj">
       <Project>{5E146249-1B6E-D8CF-85FF-F998F8663004}</Project>
       <Name>ParrelSync</Name>
+    </ProjectReference>
+    <ProjectReference Include="CFXRRuntime.csproj">
+      <Project>{DD59BF22-4C4E-5031-07AD-DA3DBE3C5AEE}</Project>
+      <Name>CFXRRuntime</Name>
     </ProjectReference>
     <ProjectReference Include="Fusion.Unity.Editor.csproj">
       <Project>{8DDEDCB2-6406-7E08-2748-DBACBA888AC6}</Project>

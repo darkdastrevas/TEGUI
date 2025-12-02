@@ -69,26 +69,31 @@
     <Compile Include="Assets\Scripts\Players\PlayerInteraction.cs" />
     <Compile Include="Assets\Scripts\Audio\PlaySoundEnter.cs" />
     <Compile Include="Assets\Scripts\UI e Menu\PersistentEventSystem.cs" />
+    <Compile Include="Assets\Scripts\Fusion\PlayerSpawner.cs" />
     <Compile Include="Assets\Scripts\Players\ChangeTextureObject.cs" />
     <Compile Include="Assets\Scripts\Players\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\Players\ObjectInteraction.cs" />
     <Compile Include="Assets\Scripts\UI e Menu\MenuButtons.cs" />
     <Compile Include="Assets\Scripts\Audio\SoundsSO.cs" />
     <Compile Include="Assets\Scripts\Audio\VolumeSettings.cs" />
-    <Compile Include="Assets\Scripts\UI e Menu\VolumeSettingsRefresher.cs" />
     <Compile Include="Assets\Scripts\Scripts da fase 1 entrega\BridgeButton.cs" />
+    <Compile Include="Assets\Scripts\UI e Menu\VictoryScreenController.cs" />
     <Compile Include="Assets\Scripts\Audio\SoundsSOEditor.cs" />
     <Compile Include="Assets\Scripts\UI e Menu\LoadingScreenManager.cs" />
     <Compile Include="Assets\Scripts\Players\PlayerCameraFollow.cs" />
     <Compile Include="Assets\Scripts\Players\PlayerMovementDefi.cs" />
     <Compile Include="Assets\Scripts\PushPullController.cs" />
+    <Compile Include="Assets\Scripts\Audio\VolumeSettingsRefresher.cs" />
     <Compile Include="Assets\Scripts\UI e Menu\CountdownTimer.cs" />
     <Compile Include="Assets\Scripts\UI e Menu\UIRefresher.cs" />
+    <Compile Include="Assets\Scripts\UI e Menu\DefeatScreenController.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\Scripts\Audio\SoundValues.cs" />
     <Compile Include="Assets\Scripts\Audio\AudioManager.cs" />
-    <Compile Include="Assets\Scripts\Players\PlayerSpawner.cs" />
+    <Compile Include="Assets\Scripts\Fusion\GameSessionHandler.cs" />
     <Compile Include="Assets\Scripts\UI e Menu\TitleScreen.cs" />
+    <Compile Include="Assets\Scripts\UI e Menu\TextureCounterHUD.cs" />
+    <Compile Include="Assets\Scripts\Players\IPlayerMovement.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Players\LedgeGrab.cs" />
     <Compile Include="Assets\Scripts\Audio\SoundManager.cs" />
@@ -96,6 +101,8 @@
     <Compile Include="Assets\Scripts\PushableNetworkController.cs" />
     <Compile Include="Assets\Scripts\Fusion\NetworkInputData.cs" />
     <Compile Include="Assets\Scripts\UI e Menu\MenuWindow.cs" />
+    <Compile Include="Assets\Scripts\Fusion\NetworkManager.cs" />
+    <Compile Include="Assets\Scripts\UI e Menu\PlayerHUD.cs" />
     <Compile Include="Assets\Scripts\Players\TextureCounterController.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -106,8 +113,10 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile-2-Pass.shader" />
     <None Include="Assets\Photon\Fusion\Assemblies\Fusion.Log.xml" />
     <None Include="Assets\Photon\Fusion\Assemblies\Fusion.Common.xml" />
+    <None Include="Assets\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR_SETTINGS.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\Photon\Fusion\Assemblies\Fusion.Sockets.xml" />
+    <None Include="Assets\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\Photon\Fusion\Assemblies\Fusion.Log.dll" />
@@ -138,6 +147,8 @@
     <None Include="Assets\Photon\Fusion\Assemblies\Fusion.Realtime.xml" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\Photon\Fusion\Plugins\NanoSockets\Metro\x86\libnanosockets.dll" />
+    <None Include="Assets\JMO Assets\Cartoon FX Remaster\CFXR Prefabs\Texts\_Make your own text effect.txt" />
+    <None Include="Assets\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR_PASSES.cginc" />
     <None Include="Assets\Photon\PhotonLibs\netstandard2.0\Photon3Unity3D.dll" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\Photon\Fusion\Plugins\NanoSockets\Windows\nanosockets.dll" />
@@ -148,6 +159,7 @@
     <None Include="Assets\Photon\Fusion\Plugins\NanoSockets\WebGL\NanoSockets.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
+    <None Include="Assets\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR_URP.cginc" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
     <None Include="Assets\Assets\3D\Models\Tones\ToonShader.shader" />
     <None Include="Assets\FlexibleCelShader\Shaders\CelNoOutline.shader" />
@@ -1416,9 +1428,17 @@
       <Project>{B96B2FEE-2FF0-A544-A7B4-DF0D68B38D39}</Project>
       <Name>Fusion.Unity</Name>
     </ProjectReference>
+    <ProjectReference Include="CFXREditor.csproj">
+      <Project>{9940EC78-4F51-CC0C-74C9-94239FB6D7CC}</Project>
+      <Name>CFXREditor</Name>
+    </ProjectReference>
     <ProjectReference Include="ParrelSync.csproj">
       <Project>{5E146249-1B6E-D8CF-85FF-F998F8663004}</Project>
       <Name>ParrelSync</Name>
+    </ProjectReference>
+    <ProjectReference Include="CFXRRuntime.csproj">
+      <Project>{DD59BF22-4C4E-5031-07AD-DA3DBE3C5AEE}</Project>
+      <Name>CFXRRuntime</Name>
     </ProjectReference>
     <ProjectReference Include="Fusion.Unity.Editor.csproj">
       <Project>{8DDEDCB2-6406-7E08-2748-DBACBA888AC6}</Project>

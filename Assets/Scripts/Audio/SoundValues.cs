@@ -5,6 +5,18 @@ namespace SmallHedge.SoundManager
 {
     public enum SoundType
     {
-        //Put sound names in here
+        SlideIn,
+        SlideOut,
+        SlideOutTitle,
+        Click,
+        Hover,
+        Pulo,
+        Empurrar,
+        Empurrar2,
+        Pixo,
+        Pixo2,
+        Agarrar,
+        Derrota,
+        Vitoria,
     }
 }

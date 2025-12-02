@@ -163,8 +163,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a983f65f3a291d04f8880aa7b77503cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab:
-    RawGuidValue: ac32a34bf73f3074eae96f900052fc5b
 --- !u!1 &347543564
 GameObject:
   m_ObjectHideFlags: 0
@@ -790,8 +788,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9514163f2b7997f43ae7e180001c6414, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab:
-    RawGuidValue: ac32a34bf73f3074eae96f900052fc5b
+  player1Prefab: {fileID: 0}
+  player2Prefab: {fileID: 0}
 --- !u!1 &1824420670
 GameObject:
   m_ObjectHideFlags: 0
@@ -839,8 +837,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9514163f2b7997f43ae7e180001c6414, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab:
-    RawGuidValue: ac32a34bf73f3074eae96f900052fc5b
+  player1Prefab: {fileID: 0}
+  player2Prefab: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

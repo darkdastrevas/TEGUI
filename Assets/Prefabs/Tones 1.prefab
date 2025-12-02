@@ -1046,6 +1046,7 @@ GameObject:
   - component: {fileID: 8977543570489525862}
   - component: {fileID: 5732448273725382552}
   - component: {fileID: 130250473241834932}
+  - component: {fileID: 4715564634957933351}
   m_Layer: 0
   m_Name: playerCamera
   m_TagString: MainCamera
@@ -1201,6 +1202,66 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offset: {x: 0, y: 3, z: -6}
   fixedRotation: {x: 20, y: 0, z: 0}
+--- !u!114 &4715564634957933351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6901500821066950479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volumeTrigger: {fileID: 8841204020610014138}
+  volumeLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  stopNaNPropagation: 1
+  finalBlitToCameraTarget: 0
+  antialiasingMode: 0
+  temporalAntialiasing:
+    jitterSpread: 0.75
+    sharpness: 0.25
+    stationaryBlending: 0.95
+    motionBlending: 0.85
+  subpixelMorphologicalAntialiasing:
+    quality: 2
+  fastApproximateAntialiasing:
+    fastMode: 0
+    keepAlpha: 0
+  fog:
+    enabled: 1
+    excludeSkybox: 1
+  debugLayer:
+    lightMeter:
+      width: 512
+      height: 256
+      showCurves: 1
+    histogram:
+      width: 512
+      height: 256
+      channel: 3
+    waveform:
+      exposure: 0.12
+      height: 256
+    vectorscope:
+      size: 256
+      exposure: 0.12
+    overlaySettings:
+      linearDepth: 0
+      motionColorIntensity: 4
+      motionGridSize: 64
+      colorBlindnessType: 0
+      colorBlindnessStrength: 1
+  m_Resources: {fileID: 11400000, guid: d82512f9c8e5d4a4d938b575d47f88d4, type: 2}
+  m_ShowToolkit: 0
+  m_ShowCustomSorter: 0
+  breakBeforeColorGrading: 0
+  m_BeforeTransparentBundles: []
+  m_BeforeStackBundles: []
+  m_AfterStackBundles: []
 --- !u!1 &7322578839107840749
 GameObject:
   m_ObjectHideFlags: 0
@@ -1282,6 +1343,7 @@ GameObject:
   - component: {fileID: 4172216326533322461}
   - component: {fileID: 8926610378695528377}
   - component: {fileID: -8263356558733698981}
+  - component: {fileID: -1699971278826573640}
   m_Layer: 0
   m_Name: Tones 1
   m_TagString: Player2
@@ -1454,6 +1516,9 @@ MonoBehaviour:
   moveSpeed: 0.9
   rayAmount: 2
   rayOffset: 0.2
+  grabEffectPrefab: {fileID: 119183615461286708, guid: 4761280e1b3662c41bdb0290cc1337e4, type: 3}
+  effectDuration: 2
+  effectForwardOffset: 1
   lateralRayLength: 1
   lateralRayOffset: 0.9
   ledgeContinuityLateralOffset: 0.5
@@ -1484,6 +1549,20 @@ MonoBehaviour:
   paintTrigger: Pixo
   paintDelay: 2.6
   debugMode: 1
+--- !u!114 &-1699971278826573640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8331635188085275102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1541381998, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Guid:
+    RawGuidValue: 8d02ead10968e084496c604705e32f0c
 --- !u!1 &8445789164562213607
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Fusion;
+using System.Collections;
 
 [RequireComponent(typeof(CharacterController))]
 public class LedgeGrab : NetworkBehaviour
@@ -24,6 +25,12 @@ public class LedgeGrab : NetworkBehaviour
     public float moveSpeed = 2f;
     public int rayAmount = 5;
     public float rayOffset = 0.15f;
+
+    // NOVO: Prefab da Partícula
+    [Header("Efeitos")]
+    public GameObject grabEffectPrefab;
+    public float effectDuration = 1.0f;
+    public float effectForwardOffset = 0.1f;
 
     [Header("Lateral Rays")]
     public float lateralRayLength = 0.5f;
@@ -211,6 +218,9 @@ public class LedgeGrab : NetworkBehaviour
         animator?.SetBool("IsGrabIdle", true);
 
         Runner.StartCoroutine(GrabInputDelay());
+
+        // NOVO: Chama o RPC para sincronizar o efeito de partícula
+        RPC_PlayGrabEffect(lastLedgeHit.point, grabRotation, effectForwardOffset);
     }
 
     private void ReleaseLedge()
@@ -229,6 +239,45 @@ public class LedgeGrab : NetworkBehaviour
         transform.position -= transform.forward * 0.1f;
 
         Runner.StartCoroutine(GrabCooldownRoutine());
+    }
+
+    #endregion
+    // ───────────────────────────────────────────────────────────────────────────────
+
+
+    // ───────────────────────────────────────────────────────────────────────────────
+    #region === EFEITOS (RPC) ===
+
+    // RPC: Chamado pelo InputAuthority e executado em todos os clientes
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+    private void RPC_PlayGrabEffect(Vector3 hitPoint, Quaternion playerRotation, float forwardOffset)
+    {
+        // O playerRotation já está alinhado com a parede (forward do player aponta para a parede).
+        // Usamos playerRotation * Vector3.forward para obter a direção PARA A PAREDE.
+        // O hitPoint é o ponto na superfície da parede.
+
+        // CÁLCULO DE POSIÇÃO AJUSTADO:
+        // Ponto de Acerto - (Direção PARA a parede * Offset)
+        Vector3 spawnPosition = hitPoint - (playerRotation * Vector3.forward * forwardOffset);
+
+        // Rotação: Vira a partícula para longe da parede (normal do hit)
+        // OBS: Você pode querer usar Quaternion.identity ou a rotação do player (playerRotation) 
+        // dependendo de como sua partícula está configurada. Usaremos a normal para apontar 
+        // "para fora" da parede, como estava na versão anterior, mas com o ponto ajustado.
+
+        // A 'lastLedgeHit' não está disponível no RPC, então calcularemos a rotação
+        // de forma simples ou, se for um efeito geral, podemos usar a rotação do player.
+        // Vamos usar uma rotação simples para a partícula.
+        Quaternion effectRotation = Quaternion.identity;
+
+        // Instancia o efeito
+        if (grabEffectPrefab != null)
+        {
+            GameObject effect = Instantiate(grabEffectPrefab, spawnPosition, effectRotation);
+
+            // Destrói a partícula após a duração definida
+            Destroy(effect, effectDuration);
+        }
     }
 
     #endregion
@@ -269,7 +318,7 @@ public class LedgeGrab : NetworkBehaviour
     {
         Vector3 origin = transform.position + Vector3.up * lateralRayOffset;
         return Physics.Raycast(origin, dir, out RaycastHit hit, lateralRayLength) &&
-               !hit.collider.CompareTag("Ledge");
+                !hit.collider.CompareTag("Ledge");
     }
 
     private bool HasLedgeAhead(Vector3 dir)
@@ -311,26 +360,6 @@ public class LedgeGrab : NetworkBehaviour
         Runner.StartCoroutine(ClimbUpRoutine());
     }
 
-    private System.Collections.IEnumerator ClimbUp()
-    {
-        float t = 0;
-        Vector3 start = transform.position;
-        Vector3 end = start + Vector3.up * climbUpHeight;
-
-        while (t < 1f)
-        {
-            t += Time.deltaTime * climbUpSpeed;
-            transform.position = Vector3.Lerp(start, end, t);
-            yield return null;
-        }
-
-        controller.enabled = true;
-        playerMovement.enabled = true;
-        playerMovement._velocity.y = 0;
-
-        isGrabbing = false;
-        animator?.SetBool("IsGrabbing", false);
-    }
     private System.Collections.IEnumerator ClimbUpRoutine()
     {
         isClimbing = true;
@@ -369,14 +398,14 @@ public class LedgeGrab : NetworkBehaviour
     // ───────────────────────────────────────────────────────────────────────────────
     #region === TIMERS ===
 
-    private System.Collections.IEnumerator GrabCooldownRoutine()
+    private IEnumerator GrabCooldownRoutine()
     {
         grabBlocked = true;
         yield return new WaitForSeconds(grabCooldown);
         grabBlocked = false;
     }
 
-    private System.Collections.IEnumerator GrabInputDelay()
+    private IEnumerator GrabInputDelay()
     {
         jumpBlockedAfterGrab = true;
         yield return new WaitForSeconds(grabJumpInputDelay);
@@ -384,7 +413,7 @@ public class LedgeGrab : NetworkBehaviour
     }
 
     // Coroutine para resetar o cooldown de jump após grab jump
-    private System.Collections.IEnumerator JumpCooldownRoutine()
+    private IEnumerator JumpCooldownRoutine()
     {
         yield return new WaitForSeconds(jumpCooldownDuration);
         jumpOnCooldown = false;
