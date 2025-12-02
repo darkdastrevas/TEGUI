@@ -36,11 +36,16 @@ public class CountdownTimer : NetworkBehaviour
         {
             CurrentTime = 0;
 
-            // Chamar o GameManager para notificar o fim.
-            // O State Authority dispara a ação no servidor.
-            GameManager.Instance.OnTimeExpired();
-
-            Debug.Log("O TEMPO ACABOU (STATE AUTHORITY)!");
+            // 🔑 CHAMADA PARA O HANDLER DE SESSÃO
+            if (GameSessionHandler.ActiveHandler != null)
+            {
+                // A State Authority chama o RPC no Handler para sincronizar o Game Over
+                GameSessionHandler.ActiveHandler.RPC_GameOver();
+            }
+            else
+            {
+                Debug.LogError("GameSessionHandler não está ativo na sessão.");
+            }
         }
     }
 

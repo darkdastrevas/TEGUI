@@ -2,11 +2,16 @@
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class PlayerMovement : NetworkBehaviour
+public class PlayerMovement : NetworkBehaviour, IPlayerMovement
 {
     private CharacterController _controller;
     private Animator _animator;
     private LedgeGrab ledgeGrab;
+
+    // Propriedade pública para expor se o player está grounded (implementa IPlayerMovement)
+    public bool IsGrounded => _controller != null && _controller.isGrounded;
+
+    public bool IsMovementBlocked = false;
 
     public Vector3 _velocity;
     private bool _jumpPressed;
@@ -24,11 +29,42 @@ public class PlayerMovement : NetworkBehaviour
     public float GravityValue = -9.81f;
     public float landLockTime = 0.4f;
 
+    [Header("Lata de Tinta")]
+    public GameObject paintCan;
+    public float paintCanDuration = 2f;
+    private bool paintInUse = false;
+
     public override void Spawned()
     {
         _controller = GetComponent<CharacterController>();
         _animator = GetComponentInChildren<Animator>();
         ledgeGrab = GetComponent<LedgeGrab>();
+
+        if (paintCan != null)
+            paintCan.SetActive(false); // começa invisível
+
+        // Encontra e configura a HUD existente na cena
+        if (Object.HasInputAuthority)
+        {
+            var hudObject = GameObject.Find("PlayerHUD"); // Encontra o objeto HUD na cena
+            if (hudObject != null)
+            {
+                var hudScript = hudObject.GetComponent<PlayerHUD>();
+                if (hudScript != null)
+                {
+                    hudScript.SetPlayer(this); // Configura o ícone baseado na tag do jogador
+                    Debug.Log("[PlayerMovement] HUD da cena configurada para jogador local.");
+                }
+                else
+                {
+                    Debug.LogWarning("[PlayerMovement] PlayerHUD script não encontrado no objeto da cena.");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("[PlayerMovement] PlayerHUD objeto não encontrado na cena.");
+            }
+        }
     }
 
     void Update()
@@ -40,6 +76,12 @@ public class PlayerMovement : NetworkBehaviour
 
         if (Input.GetButtonDown("Jump"))
             _jumpPressed = true;
+
+        // Entrada da lata
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            TryUsePaintCan();
+        }
     }
 
     public override void FixedUpdateNetwork()
@@ -47,11 +89,25 @@ public class PlayerMovement : NetworkBehaviour
         if (!HasInputAuthority)
             return;
 
+        // BLOQUEIO TOTAL DURANTE A LATA
+        if (paintInUse)
+        {
+            // Não faz nada aqui, pois o movimento é bloqueado na coroutine
+            return;
+        }
+
         // BLOQUEIO TOTAL DURANTE ESCALADA
-        if (ledgeGrab != null && (ledgeGrab.isGrabbing | ledgeGrab.isClimbing))
+        if (ledgeGrab != null && (ledgeGrab.isGrabbing || ledgeGrab.isClimbing))
         {
             _velocity.y = -1f;
             _jumpPressed = false;
+            return;
+        }
+
+        if (IsMovementBlocked)
+        {
+            // Se travado, garantimos que o player pare completamente
+            _velocity = Vector3.zero;
             return;
         }
 
@@ -124,7 +180,65 @@ public class PlayerMovement : NetworkBehaviour
         }
 
         _jumpPressed = false;
-
         wasGroundedLastFrame = isGrounded;
+    }
+
+    // --------------------------
+    //     SISTEMA DA LATA
+    // --------------------------
+
+    private System.Collections.IEnumerator UsePaintCanRoutine()
+    {
+        // Verificação reforçada: só ativa se estiver no chão
+        if (!_controller.isGrounded)
+        {
+            Debug.Log("[PlayerMovement] Spray can só pode ser usado no chão!");
+            yield break; // Sai da coroutine sem ativar
+        }
+
+        paintInUse = true;
+
+        // ativa a lata
+        if (paintCan != null)
+            paintCan.SetActive(true);
+
+        // espera o tempo configurado
+        yield return new WaitForSeconds(paintCanDuration);
+
+        // desativa a lata
+        if (paintCan != null)
+            paintCan.SetActive(false);
+
+        // libera movimento
+        SetMovementBlocked(false);
+
+        paintInUse = false;
+    }
+
+    private void TryUsePaintCan()
+    {
+        // Verificação inicial: só pode tentar usar no chão
+        if (!_controller.isGrounded)
+            return;
+
+        // evitar spam
+        if (paintInUse)
+            return;
+
+        Runner.StartCoroutine(UsePaintCanRoutine());
+    }
+
+    // Implementação da interface: Bloqueia/desbloqueia movimento
+    public void SetMovementBlocked(bool isBlocked)
+    {
+        IsMovementBlocked = isBlocked;
+
+        if (isBlocked && _animator != null)
+        {
+            _animator.SetBool("isWalking", false);
+            _animator.SetBool("isIdle", true);
+            _animator.SetBool("isJumping", false);
+            _animator.SetBool("isFalling", false);
+        }
     }
 }

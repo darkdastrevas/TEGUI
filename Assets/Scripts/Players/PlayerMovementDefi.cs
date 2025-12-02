@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(CharacterController))]
-public class PlayerMovementDefi : NetworkBehaviour
+public class PlayerMovementDefi : NetworkBehaviour, IPlayerMovement
 {
     // =================================================================
     // REFERÊNCIAS
@@ -11,8 +11,12 @@ public class PlayerMovementDefi : NetworkBehaviour
     private CharacterController _controller;
     private Animator _animator; // Referência ao Animator
 
+    // Propriedade pública para expor se o player está grounded (implementa IPlayerMovement)
+    public bool IsGrounded => _controller != null && _controller.isGrounded;
+
     // Variável de velocidade vertical (compartilhada)
     [HideInInspector] public Vector3 _velocity;
+    [HideInInspector] public bool IsMovementBlocked = false;
 
     // =================================================================
     // CONFIGURAÇÕES
@@ -49,6 +53,29 @@ public class PlayerMovementDefi : NetworkBehaviour
     {
         _controller = GetComponent<CharacterController>();
         _animator = GetComponentInChildren<Animator>();
+
+        // Encontra e configura a HUD existente na cena
+        if (Object.HasInputAuthority)
+        {
+            var hudObject = GameObject.Find("PlayerHUD"); // Encontra o objeto HUD na cena
+            if (hudObject != null)
+            {
+                var hudScript = hudObject.GetComponent<PlayerHUD>();
+                if (hudScript != null)
+                {
+                    hudScript.SetPlayer(this); // Configura o ícone baseado na tag do jogador
+                    Debug.Log("[PlayerMovementDefi] HUD da cena configurada para jogador local.");
+                }
+                else
+                {
+                    Debug.LogWarning("[PlayerMovementDefi] PlayerHUD script não encontrado no objeto da cena.");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("[PlayerMovementDefi] PlayerHUD objeto não encontrado na cena.");
+            }
+        }
     }
 
     void Update()
@@ -93,6 +120,13 @@ public class PlayerMovementDefi : NetworkBehaviour
     {
         if (!HasInputAuthority)
             return;
+
+        if (IsMovementBlocked)
+        {
+            // Se travado, garantimos que o player pare completamente
+            _velocity = Vector3.zero;
+            return;
+        }
 
         // 1. Aplica e zera a velocidade de queda no chão
         if (_controller.isGrounded && _velocity.y < 0)
@@ -183,6 +217,20 @@ public class PlayerMovementDefi : NetworkBehaviour
                 _animator.SetBool("isWalking", false);
             }
             _animator.SetFloat("Speed", horizontalSpeed);
+        }
+    }
+
+    // Implementação da interface: Bloqueia/desbloqueia movimento
+    public void SetMovementBlocked(bool isBlocked)
+    {
+        IsMovementBlocked = isBlocked;
+        // Opcional: Desligar animações de movimento quando travado
+        if (isBlocked && _animator != null)
+        {
+            _animator.SetBool("isWalking", false);
+            _animator.SetBool("isIdle", true);
+            _animator.SetBool("isJumping", false);
+            _animator.SetBool("isFalling", false);
         }
     }
 }
