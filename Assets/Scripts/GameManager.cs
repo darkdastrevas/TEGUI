@@ -13,8 +13,10 @@ public class GameManager : MonoBehaviour
     [Header("Music")]
     public AudioSource musicSource;
     [Header("Music Fade Out")]
-    public float fadeOutDuration = 1.5f;    // tempo do fade
+    public float fadeOutDuration = 1.5f;     // tempo do fade
 
+    [Header("Victory Sound")]
+    public AudioClip victoryClip;            // O som de vitória para ser arrastado no Inspector
 
     [Header("Victory")]
     public int requiredTextureCount = 4;     // Número necessário para vencer
@@ -39,10 +41,8 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        // Garante que existe um AudioSource para a música
         if (musicSource == null)
         {
-            // Tenta encontrar um AudioSource na cena se a referência estiver vazia.
             musicSource = FindObjectOfType<AudioSource>();
         }
     }
@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // [Restante dos métodos de RestartLevel, RPC_InitiateRestart, ShutdownAndRestartRoutine, ReturnToMenuButton, ReturnToMenuRoutine - Sem alterações]
+    // --- [Métodos de RestartLevel e Shutdown - Omitidos para concisão, mas mantidos intactos] ---
 
     public void RestartLevel()
     {
@@ -70,11 +70,7 @@ public class GameManager : MonoBehaviour
 
             if (sessionHandler != null)
             {
-                // Chama o RPC no objeto de rede para notificar todos os clientes
-                // A classe GameSessionHandler PRECISA existir na sua cena e ser um NetworkBehaviour
-                // sessionHandler.RPC_InitiateRestart(); // Linha Original - Reativar se GameSessionHandler existe
-
-                // Fallback para compilação se GameSessionHandler não for definido:
+                // sessionHandler.RPC_InitiateRestart(); // Reativar se GameSessionHandler existe
                 StartCoroutine(ShutdownAndRestartRoutine(runner));
             }
             else
@@ -90,9 +86,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // RPC para notificar todos os clientes a fazerem shutdown (executado em todos os clientes)
-    // [Este RPC precisa ser movido para um NetworkBehaviour (ex: GameSessionHandler) para funcionar]
-    // [Rpc(RpcSources.All, RpcTargets.All)] 
     private void RPC_InitiateRestart()
     {
         var runner = FindObjectOfType<NetworkRunner>();
@@ -136,9 +129,8 @@ public class GameManager : MonoBehaviour
         isGameOverTriggered = false;
         var runner = FindObjectOfType<NetworkRunner>();
 
-        // PARA A MÚSICA
         if (musicSource != null)
-            StartCoroutine(FadeOutMusic());
+            StartCoroutine(FadeOutMusic()); // Mantenha o FadeOut normal para o Menu
 
         if (runner != null)
         {
@@ -149,9 +141,9 @@ public class GameManager : MonoBehaviour
         isBusy = false;
     }
 
+
     public void HandleGameOver(GameObject defeatScreenObject)
     {
-        // NOVO AJUSTE: Se a vitória já foi acionada, ignore o Game Over.
         if (isGameOverTriggered || isVictoryTriggered) return;
 
         isGameOverTriggered = true;
@@ -159,7 +151,7 @@ public class GameManager : MonoBehaviour
         IsGameActive = false;
         Debug.Log("Game Over: Ativando tela de derrota.");
 
-        // PARA A MÚSICA
+        // Para a música (Fade Out normal)
         if (musicSource != null)
             StartCoroutine(FadeOutMusic());
 
@@ -169,32 +161,80 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     public void HandleVictory(GameObject victoryScreenObject)
     {
-        // Condição original correta: Se a vitória OU Game Over já foram acionados, ignore.
         if (isVictoryTriggered || isGameOverTriggered) return;
 
         isVictoryTriggered = true;
         IsGameActive = false;
-
-        // PARA A MÚSICA
-        if (musicSource != null)
-            StartCoroutine(FadeOutMusic());
-
         Debug.Log("Vitória! Preparando tela de vitória...");
 
-        StartCoroutine(DelayedVictory(victoryScreenObject));
+        // CHAVE: Inicia a corrotina que FAZ O FADE OUT e CHAMA o DelayedVictory.
+        if (musicSource != null)
+        {
+            StartCoroutine(FadeOutMusicAndPlayVictory(victoryScreenObject));
+        }
+        else
+        {
+            // Fallback se não houver AudioSource
+            StartCoroutine(DelayedVictory(victoryScreenObject));
+        }
+    }
+
+    // NOVO MÉTODO: Combina Fade Out e a lógica de vitória
+    private IEnumerator FadeOutMusicAndPlayVictory(GameObject victoryScreenObject)
+    {
+        // 1. FAZ O FADE OUT
+        yield return FadeOutMusicRoutine();
+
+        // 2. TOCA O SOM DE VITÓRIA (depois que a música parou)
+        if (musicSource != null && victoryClip != null)
+        {
+            
+            Debug.Log("Som de vitória ativado após Fade Out.");
+        }
+
+        // 3. CONTINUA COM O DELAY DE VITÓRIA
+        yield return DelayedVictory(victoryScreenObject);
+    }
+
+    // MÉTODO AJUSTADO: Agora é uma corrotina pública para ser chamada por FadeOutMusicAndPlayVictory
+    private IEnumerator FadeOutMusicRoutine()
+    {
+        if (musicSource == null || musicSource.clip == null)
+            yield break;
+
+        float startVolume = musicSource.volume;
+        float t = 0f;
+
+        while (t < fadeOutDuration)
+        {
+            t += Time.unscaledDeltaTime;
+            musicSource.volume = Mathf.Lerp(startVolume, 0f, t / fadeOutDuration);
+            yield return null;
+        }
+
+        musicSource.Stop();
+        musicSource.volume = startVolume;
+    }
+
+    // MÉTODO ORIGINAL, mantido para Game Over e Menu, que agora chama o FadeOutMusicRoutine
+    private IEnumerator FadeOutMusic()
+    {
+        yield return FadeOutMusicRoutine();
     }
 
     private IEnumerator DelayedVictory(GameObject victoryScreenObject)
     {
-        float victoryDelay = 2.5f;
+        // Nota: O som de vitória já foi tocado no FadeOutMusicAndPlayVictory.
+
+        float victoryDelay = 1.5f;
         yield return new WaitForSecondsRealtime(victoryDelay);
 
         if (victoryScreenObject != null)
         {
             victoryScreenObject.SetActive(true);
+            musicSource.PlayOneShot(victoryClip);
             Debug.Log("Tela de vitória ativada.");
         }
     }
@@ -206,24 +246,4 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(ReturnToMenuRoutine());
     }
-
-    private IEnumerator FadeOutMusic()
-    {
-        if (musicSource == null || musicSource.clip == null)
-            yield break;
-
-        float startVolume = musicSource.volume;
-
-        float t = 0f;
-        while (t < fadeOutDuration)
-        {
-            t += Time.unscaledDeltaTime; // ignora TimeScale
-            musicSource.volume = Mathf.Lerp(startVolume, 0f, t / fadeOutDuration);
-            yield return null;
-        }
-
-        musicSource.Stop();
-        musicSource.volume = startVolume; // volta ao normal para próxima vez
-    }
-
 }

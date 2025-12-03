@@ -1,7 +1,5 @@
-//Author: Small Hedge Games
-//Updated: 13/06/2024
-
 using UnityEngine;
+using Fusion;
 
 namespace SmallHedge.SoundManager
 {
@@ -9,9 +7,16 @@ namespace SmallHedge.SoundManager
     {
         [SerializeField] private SoundType sound;
         [SerializeField, Range(0, 1)] private float volume = 1;
-        override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+
+        public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            SoundManager.PlaySound(sound, null, volume);
+            var networkObject = animator.GetComponentInParent<NetworkObject>();
+
+            // Só quem tem autoridade local toca o áudio
+            if (networkObject && networkObject.HasInputAuthority)
+            {
+                SoundManager.PlaySound(sound, null, volume);
+            }
         }
     }
 }

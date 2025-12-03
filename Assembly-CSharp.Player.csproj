@@ -94,6 +94,7 @@
     <Compile Include="Assets\Scripts\Fusion\GameSessionHandler.cs" />
     <Compile Include="Assets\Scripts\UI e Menu\TitleScreen.cs" />
     <Compile Include="Assets\Scripts\UI e Menu\TextureCounterHUD.cs" />
+    <Compile Include="Assets\GlobalAudioListener.cs" />
     <Compile Include="Assets\Scripts\Players\IPlayerMovement.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Players\LedgeGrab.cs" />

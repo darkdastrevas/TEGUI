@@ -1042,11 +1042,11 @@ GameObject:
   m_Component:
   - component: {fileID: 8841204020610014138}
   - component: {fileID: 3198902415681940304}
-  - component: {fileID: 371266771878813948}
   - component: {fileID: 8977543570489525862}
   - component: {fileID: 5732448273725382552}
   - component: {fileID: 130250473241834932}
   - component: {fileID: 4715564634957933351}
+  - component: {fileID: 4081185954451690780}
   m_Layer: 0
   m_Name: playerCamera
   m_TagString: MainCamera
@@ -1120,14 +1120,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &371266771878813948
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6901500821066950479}
-  m_Enabled: 1
 --- !u!114 &8977543570489525862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1142,7 +1134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PreferredRunner: 0
   Components:
-  - {fileID: 371266771878813948}
+  - {fileID: 0}
   _guid: 480ea00a-27b0-4cb9-
 --- !u!114 &5732448273725382552
 MonoBehaviour:
@@ -1262,6 +1254,14 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
+--- !u!81 &4081185954451690780
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6901500821066950479}
+  m_Enabled: 1
 --- !u!1 &7322578839107840749
 GameObject:
   m_ObjectHideFlags: 0
@@ -1343,6 +1343,7 @@ GameObject:
   - component: {fileID: 4172216326533322461}
   - component: {fileID: 8926610378695528377}
   - component: {fileID: -8263356558733698981}
+  - component: {fileID: 634516262582072593}
   m_Layer: 0
   m_Name: Tones 1
   m_TagString: Player2
@@ -1455,6 +1456,7 @@ MonoBehaviour:
   - {fileID: 4172216326533322461}
   - {fileID: 8926610378695528377}
   - {fileID: -8263356558733698981}
+  - {fileID: 634516262582072593}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &7123449814928521759
 MonoBehaviour:
@@ -1490,7 +1492,6 @@ MonoBehaviour:
   PlayerSpeed: 4
   JumpForce: 9.5
   GravityValue: -12
-  landLockTime: 1.8
   paintCan: {fileID: 3246763282812918173}
   paintCanDuration: 2.9
 --- !u!114 &8926610378695528377
@@ -1548,6 +1549,18 @@ MonoBehaviour:
   paintTrigger: Pixo
   paintDelay: 2.6
   debugMode: 1
+--- !u!114 &634516262582072593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8331635188085275102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae854c7e0424c98419d61fd74f49e0fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8445789164562213607
 GameObject:
   m_ObjectHideFlags: 0
