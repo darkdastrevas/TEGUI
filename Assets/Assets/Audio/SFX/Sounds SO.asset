@@ -13,58 +13,76 @@ MonoBehaviour:
   m_Name: Sounds SO
   m_EditorClassIdentifier: 
   sounds:
-  - name: 
+  - name: SlideIn
     volume: 0.75
     mixer: {fileID: 3877967102338146927, guid: c03310d9d2673a94792abec207204c90, type: 2}
     sounds:
     - {fileID: 8300000, guid: 81f57305b7126a648a41ed03fe33dbb3, type: 3}
-  - name: 
+  - name: SlideOut
     volume: 1
     mixer: {fileID: 3877967102338146927, guid: c03310d9d2673a94792abec207204c90, type: 2}
     sounds:
     - {fileID: 8300000, guid: fae3e36c95185794c9ee1af14477ecb7, type: 3}
-  - name: 
+  - name: SlideOutTitle
     volume: 1
     mixer: {fileID: 3877967102338146927, guid: c03310d9d2673a94792abec207204c90, type: 2}
     sounds:
     - {fileID: 8300000, guid: 1dfaf27de0bb10546ac5b03704138799, type: 3}
-  - name: 
+  - name: Click
     volume: 1
     mixer: {fileID: 3877967102338146927, guid: c03310d9d2673a94792abec207204c90, type: 2}
     sounds:
     - {fileID: 0}
-  - name: 
+  - name: Hover
     volume: 1
     mixer: {fileID: 3877967102338146927, guid: c03310d9d2673a94792abec207204c90, type: 2}
     sounds:
     - {fileID: 0}
-  - name: 
+  - name: Pulo
     volume: 1
     mixer: {fileID: 3877967102338146927, guid: c03310d9d2673a94792abec207204c90, type: 2}
     sounds:
     - {fileID: 0}
-  - name: 
+  - name: Empurrar
     volume: 1
     mixer: {fileID: 3877967102338146927, guid: c03310d9d2673a94792abec207204c90, type: 2}
     sounds:
     - {fileID: 0}
-  - name: 
+  - name: Empurrar2
     volume: 1
     mixer: {fileID: 3877967102338146927, guid: c03310d9d2673a94792abec207204c90, type: 2}
     sounds:
     - {fileID: 8300000, guid: abac39bf275602044acd6c072d7448fd, type: 3}
-  - name: 
+  - name: Pixo
     volume: 1
     mixer: {fileID: 3877967102338146927, guid: c03310d9d2673a94792abec207204c90, type: 2}
     sounds:
     - {fileID: 8300000, guid: 2799924ac65e090469e74c74c459a073, type: 3}
-  - name: 
+  - name: Pixo2
     volume: 1
     mixer: {fileID: 3877967102338146927, guid: c03310d9d2673a94792abec207204c90, type: 2}
     sounds:
     - {fileID: 8300000, guid: 2799924ac65e090469e74c74c459a073, type: 3}
-  - name: 
+  - name: Pixo3
     volume: 1
     mixer: {fileID: 3877967102338146927, guid: c03310d9d2673a94792abec207204c90, type: 2}
     sounds:
     - {fileID: 8300000, guid: 57b4049c4cfdcc74bb7c1c6fa846f2f4, type: 3}
+  - name: Grab
+    volume: 1
+    mixer: {fileID: 3877967102338146927, guid: c03310d9d2673a94792abec207204c90, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: a8c926d0d9cef174b9022b3bd8d0ea28, type: 3}
+    - {fileID: 8300000, guid: 6be0073bd1fdb3b4caf12497d328d24c, type: 3}
+  - name: GrabWalk
+    volume: 1
+    mixer: {fileID: 3877967102338146927, guid: c03310d9d2673a94792abec207204c90, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: 2bb4c344ab58625449f50ff5618c9176, type: 3}
+    - {fileID: 8300000, guid: d124f40efa5989849828db84d484f118, type: 3}
+  - name: GrabBox
+    volume: 1
+    mixer: {fileID: 3877967102338146927, guid: c03310d9d2673a94792abec207204c90, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: a99eb6042309d34419803853397878bd, type: 3}
+    - {fileID: 8300000, guid: 6be0073bd1fdb3b4caf12497d328d24c, type: 3}
