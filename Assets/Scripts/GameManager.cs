@@ -33,6 +33,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ReturnToMenuESC();
+        }
+    }
+
     public void RestartLevel()
     {
         if (isBusy) return;
@@ -163,6 +171,14 @@ public class GameManager : MonoBehaviour
             victoryScreenObject.SetActive(true);
             Debug.Log("Tela de vitória ativada.");
         }
+    }
+
+    private void ReturnToMenuESC()
+    {
+        if (isBusy) return;
+        isBusy = true;
+
+        StartCoroutine(ReturnToMenuRoutine());
     }
 
 }
