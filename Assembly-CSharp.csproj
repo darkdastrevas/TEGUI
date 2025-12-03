@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\Players\PlayerInteraction.cs" />
     <Compile Include="Assets\Scripts\Audio\PlaySoundEnter.cs" />
     <Compile Include="Assets\Scripts\UI e Menu\PersistentEventSystem.cs" />
+    <Compile Include="Assets\Scripts\Audio\UIButtonSound.cs" />
     <Compile Include="Assets\Scripts\Fusion\PlayerSpawner.cs" />
     <Compile Include="Assets\Scripts\Players\ChangeTextureObject.cs" />
     <Compile Include="Assets\Scripts\Players\PlayerMovement.cs" />

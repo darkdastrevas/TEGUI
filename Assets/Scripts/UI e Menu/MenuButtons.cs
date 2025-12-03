@@ -7,6 +7,16 @@ public class MenuButtons : MonoBehaviour
 
     public void StartGame()
     {
+        // Para a música do menu antes de carregar a fase
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.StopMusic();  // Fade out e para a música
+        }
+        else
+        {
+            Debug.LogWarning("AudioManager não encontrado! Música pode continuar.");
+        }
+
         // Inicia o loading
         if (LoadingScreenManager.Instance != null)
         {

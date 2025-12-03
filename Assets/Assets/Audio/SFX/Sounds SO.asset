@@ -33,3 +33,38 @@ MonoBehaviour:
     mixer: {fileID: 3877967102338146927, guid: c03310d9d2673a94792abec207204c90, type: 2}
     sounds:
     - {fileID: 0}
+  - name: 
+    volume: 1
+    mixer: {fileID: 3877967102338146927, guid: c03310d9d2673a94792abec207204c90, type: 2}
+    sounds:
+    - {fileID: 0}
+  - name: 
+    volume: 1
+    mixer: {fileID: 3877967102338146927, guid: c03310d9d2673a94792abec207204c90, type: 2}
+    sounds:
+    - {fileID: 0}
+  - name: 
+    volume: 1
+    mixer: {fileID: 3877967102338146927, guid: c03310d9d2673a94792abec207204c90, type: 2}
+    sounds:
+    - {fileID: 0}
+  - name: 
+    volume: 1
+    mixer: {fileID: 3877967102338146927, guid: c03310d9d2673a94792abec207204c90, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: abac39bf275602044acd6c072d7448fd, type: 3}
+  - name: 
+    volume: 1
+    mixer: {fileID: 3877967102338146927, guid: c03310d9d2673a94792abec207204c90, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: 2799924ac65e090469e74c74c459a073, type: 3}
+  - name: 
+    volume: 1
+    mixer: {fileID: 3877967102338146927, guid: c03310d9d2673a94792abec207204c90, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: 2799924ac65e090469e74c74c459a073, type: 3}
+  - name: 
+    volume: 1
+    mixer: {fileID: 3877967102338146927, guid: c03310d9d2673a94792abec207204c90, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: 57b4049c4cfdcc74bb7c1c6fa846f2f4, type: 3}

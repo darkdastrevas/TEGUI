@@ -15,8 +15,6 @@ namespace SmallHedge.SoundManager
         Empurrar2,
         Pixo,
         Pixo2,
-        Agarrar,
-        Derrota,
-        Vitoria,
+        Pixo3
     }
 }

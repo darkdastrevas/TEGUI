@@ -20,7 +20,7 @@ public class AudioManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
         else Destroy(gameObject);
     }
@@ -100,4 +100,22 @@ public class AudioManager : MonoBehaviour
         musicSource.volume = musicVolume * masterVolume;
         SFXSource.volume = sfxVolume * masterVolume;
     }
+
+    public void StopMusic(float fadeTime = 0.8f)
+    {
+        StopAllCoroutines();
+        StartCoroutine(FadeOutMusic(fadeTime));
+    }
+    IEnumerator FadeOutMusic(float time)
+    {
+        float start = musicSource.volume;
+        for (float t = 0; t < time; t += Time.deltaTime)
+        {
+            musicSource.volume = Mathf.Lerp(start, 0, t / time);
+            yield return null;
+        }
+        musicSource.Stop();
+        musicSource.volume = musicVolume * masterVolume;  // Reseta para o volume padrão
+    }
+
 }
