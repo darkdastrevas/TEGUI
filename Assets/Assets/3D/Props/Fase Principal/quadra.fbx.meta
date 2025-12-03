@@ -3,7 +3,27 @@ guid: c1fc7d03d27536d48a54d3d2b80cec26
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dark Steel.001
+    second: {fileID: 2100000, guid: bcb94a006127eb14986258508df29a02, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cesta
+    second: {fileID: 2100000, guid: 9a05777d21b4eea45870fbb830285fae, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: marca
+    second: {fileID: 2100000, guid: 1170d15d8e52ea945832ec311a1a1e95, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: quadra.001
+    second: {fileID: 2100000, guid: 6ef3d39915473ac43b75c8f13b254c34, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
