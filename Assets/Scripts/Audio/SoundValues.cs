@@ -15,6 +15,9 @@ namespace SmallHedge.SoundManager
         Empurrar2,
         Pixo,
         Pixo2,
-        Pixo3
+        Pixo3,
+        Grab,
+        GrabWalk,
+        GrabBox
     }
 }
